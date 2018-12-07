@@ -1,0 +1,380 @@
+﻿var objReport = new Report();
+function Report() {
+
+    this.init = function () {
+        try {
+            //this.Show(1);
+            //this.Clear();
+            //this.ClearDescription();
+            //this.FillGrid();
+          
+            this.FillClientDropdown();
+            //this.FillProductDropdown();
+            this.FillAgentDropdown();
+        } catch (ex) {
+            alert(ex + 'Initialize Report')
+
+        }
+    }
+
+    this.FillProductDropdown = function () {
+        try {
+            $.ajax({
+                url: api_url + '/Reports/ProductDropDownFill',
+                data: { 'FK_Client': $('#ddlClient option:selected').val() },
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        var optionhtml = '<option value=' + 0 + '>Select</option>';
+                        try {
+                            $.each(Mydata, function (i, value) {
+                                optionhtml += '<option value=' + value.ID_Product + '>' + value.ProdName + '</option>';
+                            });
+                        }
+                        catch (exx) {
+                            alert(exx);
+                        }
+                    }
+                    $('#ddlProduct').html(optionhtml);
+                },
+
+                error: function (xhr, status, error) {
+                    var err = eval('(' + xhr.responseText + ')');
+                    alert(err.Message);
+                }
+
+            });
+        }
+        catch (ex) {
+            alert(ex + ' Exception FillProductDropdown');
+        }
+    }
+
+
+    this.FillAgentDropdown = function () {
+        try {
+            $.ajax({
+                url: api_url + '/Reports/AgentDropDownFill',
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        var optionhtml = '<option value=' + 0 + '>All</option>';
+                        try {
+                            $.each(Mydata, function (i, value) {
+                                optionhtml += '<option value=' + value.ID_Agent + '>' + value.AgName + '</option>';
+                            });
+                        }
+                        catch (exx) {
+                            alert(exx);
+                        }
+                    }
+                    $('#ddlAgent').html(optionhtml);
+                },
+
+                error: function (xhr, status, error) {
+                    var err = eval('(' + xhr.responseText + ')');
+                    alert(err.Message);
+                }
+
+            });
+        }
+        catch (ex) {
+            alert(ex + ' Exception FillAgentDropdown');
+        }
+    }
+    this.FillClientDropdown = function () {
+        try {
+            $.ajax({
+
+                url: api_url + '/Reports/ClientDropDownFill',
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        var optionhtml = '<option value=' + 0 + '>Select</option>';
+                        try {
+                            $.each(Mydata, function (i, value) {
+                                optionhtml += '<option value=' + value.ID_Client + '>' + value.CliName + '</option>';
+                            });
+                        }
+                        catch (exx) {ticket
+                            alert(exx);
+                        }
+                    }
+                    $('#ddlClient').html(optionhtml);
+                },
+
+                error: function (xhr, status, error) {
+                    var err = eval('(' + xhr.responseText + ')');
+                    alert(err.Message);
+                }
+
+            });
+        }
+        catch (ex) {
+            alert(ex + ' Exception FillClientDropdown');
+        }
+    }
+    this.selectcheck = function () {
+
+        var chkArray = [];
+        chkArray = $(".chk:checked").each(function () { $(this).attr("id").count });        
+        var str = "";
+        if (chkArray.length > 0) {
+            this.TicketAssign(0);
+        }
+        else {
+            MessageText("-34", '', '#checkAll');
+            return;
+        }
+    }
+
+    this.TicketAssign = function (ID_Tickets) {        
+        $('#ddlDepartment').val(0);
+        $("#ddlDepartment").removeClass("validateerror");
+        $('#ddlTeam').val(0);
+        $("#ddlTeam").removeClass("validateerror");
+        $('#hfTicketsId').val(ID_Tickets);
+        $('#hfMode').val(0);
+        jQuery('#myModal').modal('show');       
+        }
+
+    this.TicketAssignDetails = function () {
+        $('#ddlDepartment').val(0);
+        $("#ddlDepartment").removeClass("validateerror");
+        $('#ddlTeam').val(0);
+        $("#ddlTeam").removeClass("validateerror");
+        $('#hfMode').val(1);
+        jQuery('#myModal').modal('show');
+    }
+
+    var totalsizeOfUploadFiles = 0;
+    this.UploadAttachments = function () {
+        try {
+            var files = $('#fileToUpload').prop("files");
+            var names = $.map(files, function (val) { return val.name; });
+            var data = new FormData();
+            for (var i = 0; i < files.length; i++) {
+
+                data.append("MyImages" + i, files[i]);
+
+
+                document.getElementById('btnRemove').style.display = "block";
+                document.getElementById('fileToUpload').style.display = "none";
+
+            }
+            $.ajax({
+                url: api_url + '/Tickets/UploadAction',
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (response) {
+                    //code after success
+                    try {
+                        if (response != '') {
+                            MessageText('1', 'Uploaded Successfully');
+
+                        }
+
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+                },
+                error: function (er) {
+                    MessageText('-33', '', ''); 
+
+                }
+
+            });
+
+
+
+
+
+
+
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+
+
+    this.UploadMultiAttachments = function () {
+        try {
+            var files = $('#fileMultiUpload').prop("files");
+            var names = $.map(files, function (val) { return val.name; });
+ 
+            var data = new FormData();
+            for (var i = 0; i < files.length; i++) {
+
+                data.append("MyImages" + i, files[i]);
+
+
+                document.getElementById('btnRemoveMulti').style.display = "block";
+                document.getElementById('fileMultiUpload').style.display = "none";
+
+            }
+            $.ajax({
+                url: api_url + '/Tickets/UploadAction',
+                type: "POST",
+                processData: false,
+                contentType: false,
+                data: data,
+                success: function (response) {
+                    //code after success
+                    try {
+                        if (response != '') {
+                            MessageText('1', 'Uploaded Successfully');
+
+                        }
+
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+                },
+                error: function (er) {
+                    MessageText('-33', '', '');
+
+                }
+
+            });
+
+
+            //jQuery('#selectedFiles div').html('');
+
+
+
+
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+
+    this.Remove = function () {
+        try {
+            var files = $("#fileToUpload").prop("files");
+            $('#fileToUpload').val("");
+            //   $('#selectedFiles').remove();
+            $('#selectedFiles').empty();
+
+            document.getElementById('btnRemove').style.display = "none";
+            document.getElementById('fileToUpload').style.display = "block";
+            $.ajax({
+                url: api_url + "/Tickets/Remove",
+                data: {},
+                cache: false,
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.statusCode > 0) {
+
+                    }
+                    else {
+
+                    }
+                }
+            });
+
+
+        }
+        catch (ex) {
+            alert(ex + 'return issue');
+        }
+    }
+
+
+    this.RemoveMulti = function () {
+        try {
+            var files = $("#fileMultiUpload").prop("files");
+            $('#fileMultiUpload').val("");
+            $('#selectedFilesAdd').empty();
+            document.getElementById('btnRemoveMulti').style.display = "none";
+            document.getElementById('fileMultiUpload').style.display = "block";
+            $.ajax({
+                url: api_url + "/Tickets/Remove",
+                data: {},
+                cache: false,
+                type: 'Get',
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.statusCode > 0) {
+
+                    }
+                    else {
+
+                    }
+                }
+            });
+
+
+        }
+        catch (ex) {
+            alert(ex + 'return issue');
+        }
+    }
+
+    this.scroll = function () {
+        $('html, body').animate({
+            scrollTop: $("#scrollbottomdiv").offset().top
+        }, 3000);
+    }
+
+    this.scrollup = function () {
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('#scroll').fadeIn();
+            } else {
+                $('#scroll').fadeOut();
+            }
+        });
+        $('#scroll').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 600);
+            return false;
+        });
+
+
+    }
+
+    this.CheckAllAssign = function () {
+        $('[name*= checkAllAssign]').bind('click', function () {
+            if ($('[name*= checkAllAssign]').prop('checked') == true) {
+                $('[name*= checkassign]').prop('checked', true);
+            }
+            else {
+                $('[name*= checkassign]').prop('checked', false);
+            }
+
+        });
+        $('[name*= checkassign]').bind('click', function () {
+            if ($(this).prop('checked') == false) {
+                $('[name*= checkAllAssign]').prop('checked', false);
+            }
+            if ($('[name*= "checkassign"]:checked').length == $('[name*= checkassign]').length) {
+                $('[name*= checkAllAssign]').prop('checked', true);
+            }
+        });
+        if ($('[name*= "checkassign"]:checked').length == $('[name*= checkassign]').length) {
+            $('[name*= checkAllAssign]').prop('checked', true);
+        }
+        else { $('[name*= checkAllAssign]').prop('checked', false); }
+    };
+
+}

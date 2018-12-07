@@ -1,0 +1,70 @@
+﻿using SupportTicket.Business;
+using SupportTicket.Business.Masters;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SupportTicket.Controllers
+{
+    public class PartialController : Controller
+    {
+        //
+        // GET: /Partial/
+        public PartialController()
+        {
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+
+
+        }
+        public ActionResult _Layout()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult FillMenu()
+        {
+            DataTable dtblModules = new DataTable();
+            DataTable dtblPages = new DataTable();
+            BlMenu ObjBlmenu = new BlMenu();
+
+            ObjBlmenu.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+            ObjBlmenu.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+
+            BlPopulate populate = new BlPopulate();
+            dtblModules = ObjBlmenu.FillModules();
+            string strHtml = "";
+            strHtml="<li class='header'>MAIN NAVIGATION</li>";
+            if (dtblModules.Rows.Count > 0)
+            {
+                for (int i = 0; i < dtblModules.Rows.Count; i++)
+                {
+                    ObjBlmenu.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                    ObjBlmenu.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                    ObjBlmenu.ID_PageModule = Convert.ToInt32(dtblModules.Rows[i][0].ToString());
+                    dtblPages = ObjBlmenu.FillPages();
+                    if (dtblPages.Rows.Count > 0)
+                    {
+                        strHtml = strHtml + " <li class='treeview'><a href='#'><i class='fa fa-dashboard'></i><span>" + dtblModules.Rows[i][1].ToString() + "</span><i class='fa fa-angle-left pull-right'></i></a>";
+                        strHtml = strHtml + "<ul class='treeview-menu'>";
+                        for (int j = 0; j < dtblPages.Rows.Count; j++)
+                        {
+                            strHtml = strHtml + "<li><a href=../../" + dtblPages.Rows[j][2].ToString() + "/" + dtblPages.Rows[j][4].ToString() + "><i class='fa fa-circle-o text-aqua'></i>" + dtblPages.Rows[j][3].ToString() + "</a></li>";
+                        }
+                        strHtml = strHtml + "</ul>";
+                        strHtml = strHtml + "</li>";
+                    }
+
+                }
+            }
+            ObjBlmenu = null;
+            return Json(new { statusCode = "" + strHtml + "" }, JsonRequestBehavior.AllowGet);
+        }
+    }
+}

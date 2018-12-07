@@ -1,0 +1,35 @@
+﻿using SupportTicket.Business.Masters;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SupportTicket.Controllers
+{
+    public class PartialController : Controller
+    {
+        //
+        // GET: /Partial/
+
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        [ChildActionOnly]
+        public ActionResult MainMenu()
+        {
+            BlPage ObjBlPage = new BlPage();
+            ArrayList menuItems = ObjBlPage.SelectAllPages();
+            ObjBlPage = null;
+            if (menuItems != null || menuItems.Count > 0)
+            {
+                return View(menuItems);
+            }
+            return View();
+        }
+
+    }
+}

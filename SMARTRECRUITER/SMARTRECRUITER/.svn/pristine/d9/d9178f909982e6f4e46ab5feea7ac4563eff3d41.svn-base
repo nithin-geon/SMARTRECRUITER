@@ -1,0 +1,80 @@
+﻿using SupportTicket.Business;
+using SupportTicket.Business.Masters;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Web.UI;
+
+namespace SupportTicket.Controllers
+{
+    public class PartialController : Controller
+    {
+        //
+        // GET: /Partial/
+        public PartialController()
+        {
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+
+
+        }
+        public ActionResult _Layout()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult FillMenu()
+        {
+            DataTable dtblModules = new DataTable();
+            DataTable dtblPages = new DataTable();
+            BlMenu ObjBlmenu = new BlMenu();
+
+            ObjBlmenu.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+            ObjBlmenu.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+
+            BlPopulate populate = new BlPopulate();
+            //dtblModules = ObjBlmenu.FillModules();
+            dtblPages = ObjBlmenu.FillPages();
+            string strHtml = "";
+            strHtml="<li class='header'>MAIN NAVIGATION</li>";
+            if (dtblPages.Rows.Count > 0)
+            {
+                ArrayList arr = new ArrayList();
+                for (int i = 0; i < dtblPages.Rows.Count; i++)
+                {
+                    ObjBlmenu.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                    ObjBlmenu.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                    ObjBlmenu.ID_PageModule = Convert.ToInt32(dtblPages.Rows[i][0].ToString());
+
+                    if ((!arr.Contains(dtblPages.Rows[i][0].ToString()) && i != 0))
+                    {
+                        strHtml = strHtml + "</ul>";
+                        strHtml = strHtml + "</li>";
+                    }
+                    if (!arr.Contains(dtblPages.Rows[i][0].ToString()))
+                    {
+                        arr.Add(dtblPages.Rows[i][0].ToString());
+                        strHtml = strHtml + " <li class='treeview'><a href='#'><i class='fa fa-" + dtblPages.Rows[i][2].ToString() + "'></i><span>" + dtblPages.Rows[i][1].ToString() + "</span><i class='fa fa-angle-left pull-right'></i></a>";
+                        strHtml = strHtml + "<ul class='treeview-menu'>";
+                    }
+                    //String ClientURL = Page.ResolveClientUrl("~/HomePage.aspx");
+                        strHtml = strHtml + "<li><a href=../" + dtblPages.Rows[i][4].ToString() + "/" + dtblPages.Rows[i][5].ToString() + "><i class='fa fa-circle-o text-aqua'></i>" + dtblPages.Rows[i][3].ToString() + "</a></li>";
+                    if (i == dtblPages.Rows.Count-1)
+                    {
+                        strHtml = strHtml + "</ul>";
+                        strHtml = strHtml + "</li>";
+                    }
+
+                }
+            }
+            ObjBlmenu = null;
+            return Json(new { statusCode = "" + strHtml + "" }, JsonRequestBehavior.AllowGet);
+        }
+    }
+}

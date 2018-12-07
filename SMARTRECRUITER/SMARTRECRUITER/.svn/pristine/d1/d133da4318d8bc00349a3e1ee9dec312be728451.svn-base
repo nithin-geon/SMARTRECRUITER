@@ -1,0 +1,50 @@
+﻿
+var ObjMenu = new Menu();
+var isValidation = 0;
+function Menu() {
+
+    this.init = function () {
+        try {
+            this.CallMenu();
+        }
+        catch (ex) {
+            alert(ex + 'Initialize Menu')
+        }
+    };
+
+
+    this.CallMenu = function () {
+        try {
+            $.ajax({
+                url: api_url + '/Partial/FillMenu',
+                cache: false,
+                type: "GET",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    
+                    $('#divFillMenu').html(data.statusCode);
+                    $('#spanAgNameRight').html(data.statusCodeAgent);
+                    $('#strongAgNameRight').html(data.statusCodeAgent);
+                    $('#strongAgNameLeft').html(data.statusCodeAgent);
+                    alert(data.table);
+                    var Mydata = JSON.parse(data.table);
+                     alert(data.table[0].AgMob);
+
+                    if (Mydata.length > 0) {
+                        var ObjBlAgent = value;
+                        alert(Mydata[0].AgMob);
+                        }
+                },
+                error: function (MenuHtml) {
+                    alert(MenuHtml.d);
+                    //alert('webservice_error');
+                }
+            });
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+
+}

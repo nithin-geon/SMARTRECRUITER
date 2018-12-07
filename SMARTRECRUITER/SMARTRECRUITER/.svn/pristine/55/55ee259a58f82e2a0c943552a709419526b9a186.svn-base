@@ -1,0 +1,31 @@
+﻿
+
+function Error(ErrorCode, Field, FocusControl) {  
+        switch (ErrorCode) {
+            case "-1":
+                alert("Insertion failed");
+                $(FocusControl).focus();
+                break;
+            case "-2":
+                alert(Field + "Already Exists");
+                $(FocusControl).focus();
+                break;
+            case "-11":
+                alert(Field + "Addition not permitted");
+                $(FocusControl).focus();
+                break;
+            case "-12":
+                alert(Field + "Edition not permitted");
+                $(FocusControl).focus();
+                break;
+            case "-13":
+                alert(Field + "Deletetion not permitted");
+                $(FocusControl).focus();
+                break;
+            case "-14":
+                alert(Field + "You dont have the permission");
+                $(FocusControl).focus();
+                break;              
+        }
+};
+

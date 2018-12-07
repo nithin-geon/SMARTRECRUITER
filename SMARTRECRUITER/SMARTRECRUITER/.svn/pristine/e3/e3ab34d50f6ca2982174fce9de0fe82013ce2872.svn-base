@@ -1,0 +1,136 @@
+﻿body {
+}
+
+.validateerror {
+    border-color: red!important;
+}
+
+.not-activeAnchor {
+    pointer-events: none;
+    cursor: default;
+    background-color: #b6259a;
+}
+
+.activeAnchor {
+}
+
+.not-activeAnchorSelected {
+    pointer-events: none;
+    cursor: default;
+    background-color: #efc6e7 !important;
+}
+
+.edtbtn {
+    margin-right: 20px;
+}
+
+
+.captchabox {
+    background: url('../images/captcha.jpg')repeat !important;
+    text-align: center;
+    border: none;
+    font-size: 25px !important;
+    font-weight: bold !important;
+    font-family: Harrington !important;
+    width: 43%;
+    float:left;
+}
+
+.margin {
+    margin-left: 12px !important;
+    margin-left: 12px;
+}
+
+
+.neg {
+    margin-top: -11px;
+}
+
+
+.probord {
+    border-radius: 14px;
+    border-block-start-style: groove;
+    border-block-end-width: thick;
+    border-block-start-color: violet;
+    border-top-width: thick;
+    border-left-width: thick;
+    border-left-style: groove;
+    border-left-color: black;
+    margin: 10%;
+}
+
+
+#scroll {
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    background-color: #b6259a;
+    text-indent: -9999px;
+    display: none;
+    -webkit-border-radius: 60px;
+    -moz-border-radius: 60px;
+    border-radius: 60px;
+}
+
+    #scroll span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -8px;
+        margin-top: -12px;
+        height: 0;
+        width: 0;
+        border: 8px solid transparent;
+        border-bottom-color: #ffffff;
+    }
+
+    #scroll:hover {
+        background-color: #db6ec6;
+        opacity: 1;
+        filter: "alpha(opacity=100)";
+        -ms-filter: "alpha(opacity=100)";
+    }
+
+.Loader {
+    margin: 0px;
+    padding: 0px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    background-color: #666666;
+    z-index: 30001;
+    opacity: .8;
+    filter: alpha(opacity=70);
+    display: none;
+}
+
+.loading {
+    position: absolute;
+    top: 30%;
+    left: 45%;
+    color: White;
+}
+
+.buttonBox {
+    position: absolute;
+    bottom:20px;
+    right:20px;
+    text-align: center; 
+    color: lightblue;
+    font-size:x-small;
+     font-family: Arial;
+}
+.buttonBoxw {
+    position: absolute;
+    bottom:20px;
+    right:20px;
+    text-align: center; 
+    color: white;
+    font-size:x-small;
+     font-family: Arial;
+}

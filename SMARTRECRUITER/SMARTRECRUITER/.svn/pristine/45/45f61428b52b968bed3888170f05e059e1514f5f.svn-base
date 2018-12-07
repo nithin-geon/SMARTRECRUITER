@@ -1,0 +1,57 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data;
+using SupportTicket.Business;
+using SupportTicket.Interface;
+using SupportTicket.Business.Masters;
+using SupportTicket.Interface.Masters;
+using System.Text;
+using System.Configuration;
+using SupportTicket.Filters;
+
+namespace SupportTicket.Controllers
+{
+      [CheckSessionTimeOut]
+    public class ReportsController : Controller
+    {
+
+            public ReportsController()
+        {
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+             
+
+        }
+        //
+        // GET: /Reports/
+
+        public ActionResult Reports()
+        {
+            return View();
+        }
+
+
+        public string Converttojson(DataTable table)
+        {
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            foreach (DataRow dr in table.Rows)
+            {
+                row = new Dictionary<string, object>();
+                foreach (DataColumn col in table.Columns)
+                {
+                    row.Add(col.ColumnName, dr[col]);
+                }
+                rows.Add(row);
+            }
+            return serializer.Serialize(rows);
+
+        }
+
+
+    }
+}

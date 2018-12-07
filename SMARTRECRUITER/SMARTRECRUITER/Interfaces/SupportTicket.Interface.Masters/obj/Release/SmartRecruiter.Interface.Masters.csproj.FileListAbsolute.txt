@@ -1,0 +1,9 @@
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\bin\Release\SmartRecruiter.Interface.Masters.dll
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\bin\Release\SmartRecruiter.Interface.Masters.pdb
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\bin\Release\SmartRecruiter.Interface.dll
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\bin\Release\SmartRecruiter.Interface.pdb
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\obj\Release\SmartRecruiter.Interface.Masters.csprojAssemblyReference.cache
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\obj\Release\SmartRecruiter.Interface.Masters.csproj.CoreCompileInputs.cache
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\obj\Release\SmartRecruiter.Interface.Masters.csproj.CopyComplete
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\obj\Release\SmartRecruiter.Interface.Masters.dll
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\Interfaces\SupportTicket.Interface.Masters\obj\Release\SmartRecruiter.Interface.Masters.pdb

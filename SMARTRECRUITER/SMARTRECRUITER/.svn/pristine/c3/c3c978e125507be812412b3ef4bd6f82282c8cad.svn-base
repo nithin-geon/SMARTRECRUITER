@@ -1,0 +1,273 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data;
+using SupportTicket.Business;
+using SupportTicket.Interface;
+
+using SupportTicket.Business.Masters;
+using SupportTicket.Interface.Masters;
+using System.Text;
+using System.Configuration;
+using SupportTicket.Models;
+using SupportTicket.Filters;
+
+namespace SupportTicket.Controllers
+{
+    [CheckSessionTimeOut]
+    public class AgentController : Controller
+    {
+        //
+        // GET: /Agent/
+        public AgentController()
+        {
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+
+
+        }
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public ActionResult Agent()
+        {
+            return View();
+        }
+
+        public ActionResult AgentChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult UpdateAgent(BlAgent ObjBlAgent)
+        {
+            ObjBlAgent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+            ObjBlAgent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+           
+            BlFunction blfunctions = new BlFunction();
+            string AgentPassword = "";
+            AgentPassword = blfunctions.EncryptAgent(Convert.ToString(ObjBlAgent.AgPassword.Trim()));
+            ObjBlAgent.AgPassword = AgentPassword;
+            blfunctions = null;
+
+            long statusCode = 0;
+            if (ObjBlAgent.MasterID == 0)
+            {
+                statusCode = ObjBlAgent.InsertData();
+            }
+            else
+            {
+                statusCode = ObjBlAgent.UpdateData();
+            }
+
+            ObjBlAgent = null;
+            return Json(new { statusCode = "" + statusCode + "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        public JsonResult DepartmentDropDownFill()
+        {
+            try
+            {
+
+                int statusCode = 1;
+                BlPopulate blpopulate = new BlPopulate();
+                blpopulate.TableName = "Department";
+                blpopulate.ListFields = "DepName";
+                blpopulate.ValueFields = "ID_Department";
+                blpopulate.SortFields = "DepName,ID_Department";
+                blpopulate.Criteria = "Cancelled=0 AND Active=1 AND FK_Company=" + Session["ID_Company"].ToString();
+                DataTable dt = new DataTable();
+                dt = blpopulate.PopulateData();
+                return Json(Converttojson(dt), JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                ///
+                return Json(ex);
+            }
+
+        }
+
+        [HttpPost]
+        public JsonResult TeamDropDownFill()
+        {
+            try
+            {
+
+                int statusCode = 1;
+                BlPopulate blpopulate = new BlPopulate();
+                blpopulate.TableName = "Team";
+                blpopulate.ListFields = "TeamName";
+                blpopulate.ValueFields = "ID_Team";
+                blpopulate.SortFields = "TeamName,ID_Team";
+                blpopulate.Criteria = "Cancelled=0 AND FK_Company=" + Session["ID_Company"].ToString();
+                DataTable dt = new DataTable();
+                dt = blpopulate.PopulateData();
+                return Json(Converttojson(dt), JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                ///
+                return Json(ex);
+            }
+
+        }
+
+
+        [HttpGet]
+        public JsonResult SelectAgentAll(string PageIndex = "1", string SearchItem = "")
+        {
+            try
+            {
+
+                int statusCode = 1;
+                DataTable dtbl = new DataTable();
+                BlAgent blagent = new BlAgent();
+                blagent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                blagent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+
+                blagent.AgCode = SearchItem;
+                blagent.AgName = SearchItem;
+                blagent.DepName = SearchItem;
+
+                blagent.PageIndex = Convert.ToInt32(PageIndex);
+                dtbl = blagent.SelectAllData();
+
+                return Json(Converttojson(dtbl), JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                ///
+                return Json(ex);
+            }
+
+        }
+
+        [HttpGet]
+        public JsonResult DeleteAgent(Int64 ID_Agent)
+        {
+            try
+            {
+                long statusCode = 0;
+                BlAgent blagent = new BlAgent();
+                blagent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                blagent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                blagent.MasterID = ID_Agent;
+                statusCode = blagent.DeleteData();
+                return Json(new { statusCode = "" + statusCode + "" }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
+        [HttpGet]
+        public JsonResult FillAgent(Int64 ID_Agent)
+        {
+            try
+            {
+
+                DataTable dtbl = new DataTable();
+                BlAgent blagent = new BlAgent();
+                blagent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                blagent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                blagent.MasterID = ID_Agent;
+                dtbl = blagent.SelectAllData();
+
+                BlFunction blfunctions = new BlFunction();
+                dtbl.Rows[0][6] = blfunctions.DecryptAgent(Convert.ToString(dtbl.Rows[0][6].ToString()));
+                blfunctions = null;
+
+                return Json(Converttojson(dtbl), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
+
+        public string Converttojson(DataTable table)
+        {
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            foreach (DataRow dr in table.Rows)
+            {
+                row = new Dictionary<string, object>();
+                foreach (DataColumn col in table.Columns)
+                {
+                    row.Add(col.ColumnName, dr[col]);
+                }
+                rows.Add(row);
+            }
+            return serializer.Serialize(rows);
+
+        }
+
+
+
+        [HttpPost]
+        public ActionResult UpdateAgentChangePassword(BlAgent ObjBlAgent)
+        {
+            ObjBlAgent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+            ObjBlAgent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+            ObjBlAgent.MasterID = Convert.ToInt64(Session["ID_Agent"]);
+
+            BlFunction blfunctions = new BlFunction();
+            string CurrentPassword = "";
+            CurrentPassword = blfunctions.EncryptAgent(Convert.ToString(ObjBlAgent.CurrentPassword.Trim()));
+            ObjBlAgent.CurrentPassword = CurrentPassword;
+
+            string AgentPassword = "";
+            AgentPassword = blfunctions.EncryptAgent(Convert.ToString(ObjBlAgent.AgPassword.Trim()));
+            ObjBlAgent.AgPassword = AgentPassword;
+
+            blfunctions = null;
+
+            long statusCode = 0;
+            if (ObjBlAgent.MasterID == 0)
+            {
+                statusCode = ObjBlAgent.ChangePassword();
+            }
+            else
+            {
+                statusCode = ObjBlAgent.ChangePassword();
+            }
+
+            ObjBlAgent = null;
+            return Json(new { statusCode = "" + statusCode + "" }, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpGet]
+        public JsonResult FillAgentChangePassword()
+        {
+            try
+            {
+
+                DataTable dtbl = new DataTable();
+                BlAgent blagent = new BlAgent();
+                blagent.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                blagent.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                blagent.MasterID = Convert.ToInt64(Session["ID_Agent"]); 
+                dtbl = blagent.SelectAllData();
+
+                return Json(Converttojson(dtbl), JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
+        }
+
+    }
+}

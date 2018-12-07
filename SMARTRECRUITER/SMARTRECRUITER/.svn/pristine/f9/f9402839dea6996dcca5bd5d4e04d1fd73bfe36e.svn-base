@@ -1,0 +1,126 @@
+﻿@{
+    Layout = null;
+}
+ 
+
+
+<script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/UserLogin.js"></script>
+<script src="~/js/ng-cap.js"></script>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>SupportTicket</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        <meta name="viewport" content="width=device-width" />
+
+        <link href="~/css/Style.css" rel="stylesheet" />
+
+       <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Plugins/iCheck/flat/blue.css">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="~/Plugins/morris/morris.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="~/Plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="~/Plugins/datepicker/datepicker3.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="~/Plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+
+    
+<script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/UserLogin.js"></script>
+<script src="~/js/ng-cap.js"></script>
+
+    
+
+<script>
+
+    var api_url = '@ViewBag.api_url'
+
+
+    $(document).ready(function () {
+        ObjUserLogin.init();
+       
+    });
+</script>
+</head>
+<body class="hold-transition login-page">
+   <div class="login-box">
+  <div class="login-logo">
+    <a href="#"><b>Perfect Software Solution</b> ltd</a>
+  </div>
+  <!-- /.login-logo -->
+  <div class="login-box-body" >
+    <p class="login-box-msg">Sign in to start User session</p>
+
+   
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Email" id="txtUserName" type="email" onchange="ObjUserLogin.Validate()"  />
+         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input class="form-control" placeholder="Password" id="txtPassword" type="password" onchange="ObjUserLogin.Validate()"  />
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+       <div class="row">
+                        <div>
+                             <div ng-app="myApp" ng-controller="myCtrl">
+
+                                <input type="text" id="txtCaptcha" class="captchabox" disabled/>
+                                <button type="button" id="btnrefresh" class="btn btn-labeled btn-default clear neg" ng-click="captchain = null" onclick="ObjUserLogin.DrawCaptcha();">
+                                <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span></button>
+                                <div> <input type="text" class="margin" ng-model="captchain"><br> </div>
+                                @*<button  id="btnSubmit" type="submit" ng-disabled="capvalid!=true" class="btn btn-primary btn-block btn-flat pull-right margin" style="width:50%" onclick="ObjUserLogin.Submit()" >Login</button>*@
+                                 <button  id="btnSubmit" type="submit" ng-disabled="capvalid!=true" class="btn btn-primary btn-block btn-flat pull-right margin" style="width:50%" onclick="ObjUserLogin.Submit()" >Login</button>
+  
+                             </div>
+                       </div>
+      </div>
+    
+    
+
+  
+
+  </div>
+  <!-- /.login-box-body -->
+</div>
+<!-- /.login-box -->
+
+<!-- jQuery 2.2.3 -->
+@*<script src="~/Plugins/jQuery/jQuery-2.1.4.min.js"></script>*@
+<!-- Bootstrap 3.3.6 -->
+<script src="~/Bootstrap/js/bootstrap.js"></script>
+<!-- iCheck -->
+       <link rel="stylesheet" href="~/Plugins/iCheck/icheck.js">
+
+<script>
+    $(function () {
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-blue',
+            radioClass: 'iradio_square-blue',
+            increaseArea: '20%' // optional
+        });
+    });
+</script>
+
+</body>
+</html>

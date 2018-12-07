@@ -1,0 +1,100 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+    <script src="~/js/ng-cap.js"></script>
+    <script src="~/js/AgentLogin.js"></script>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/css/Style.css" rel="stylesheet" />
+    <link href="~/AgentLogin/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="~/AgentLogin/css/style5.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/AgentLogin/css/style.css" rel="stylesheet" />
+    <script src="~/AgentLogin/js/jquery-2.1.1.js"></script>
+   
+
+    <link rel="stylesheet" type="text/css" href="~/AgentLogin/css/style1.css" />
+
+
+    <script>
+
+        var api_url = '@ViewBag.api_url'
+
+        $(document).ready(function () {
+
+            ObjAgentlogin.init();
+        });
+    </script>
+</head>
+<body id="page">
+
+    <div>
+        <ul class="cb-slideshow">
+            <li><span>Image 01</span>
+            </li>
+            <li><span>Image 02</span>
+            </li>
+            <li><span>Image 03</span>
+            </li>
+            <li><span>Image 04</span>
+            </li>
+        </ul>
+        <div class="demo">
+            <div class="login">
+                <div class="login__check">
+                    <div class="logo"></div>
+                </div>
+                <div class="login__form">
+                    <div class="login__row">
+                        <svg class="login__icon name svg-icon" viewBox="0 0 20 20">
+                            <path d="M0,20 a10,8 0 0,1 20,0z M10,0 a4,4 0 0,1 0,8 a4,4 0 0,1 0,-8" />
+                        </svg>
+                        @*<input type="text" class="login__input name" placeholder="Username" />*@
+                        <input id="txtUserName" type="text" value="User Name" class="login__input name" placeholder="Username" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'User Name';}">
+                    </div>
+
+                    <div class="login__row">
+                        <svg class="login__icon pass svg-icon" viewBox="0 0 20 20">
+                            <path d="M0,20 20,20 20,8 0,8z M10,13 10,16z M4,8 a6,8 0 0,1 12,0" />
+                        </svg>
+                        @*                        <input type="password" class="login__input pass" placeholder="Password" />*@
+                        <input id="txtPassword" type="password" class="login__input pass" value="Password" placeholder="Password" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'Password';}">
+                    </div>
+                    <div ng-app="myApp" ng-controller="myCtrl">
+                        <div>
+                            <input type="text" id="txtCaptcha" class="captchabox" disabled />
+                        </div>
+                        <div class="re_btnag1">
+                            <button type="button" id="btnrefresh" class="refreh_btnag" ng-click="captchain = null" onclick="ObjAgentlogin.DrawCaptcha();" style="font-size: 25px;">
+                                <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                            </button>
+                        </div>
+                        <div class="re_btnag3">
+                            <input type="text" id="txtCaptchaInput" class="txtCaptcha" ng-model="captchain"><br>
+                        </div>
+                        <button type="button" class="login__submit" ng-disabled="capvalid!=true" onclick="ObjAgentlogin.Submit();">Sign in</button>
+                    </div>
+                    <div style="text-align: center; color: red; font-family: Arial">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 " id="lblLogin" style="font-size: 12px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<script src="~/AgentLogin/js/index.js"></script>*@
+</body>
+</html>

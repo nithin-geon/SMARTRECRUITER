@@ -1,0 +1,65 @@
+﻿
+var ObjAgentDashBoard = new AgentDashBoard();
+var isValidation = 0;
+function AgentDashBoard() {
+
+    this.init = function () {
+
+        try {
+            this.FillDashBoard();
+        }
+        catch (ex) {
+            alert(ex + 'Initialize AgentDashBoard')
+        }
+    };
+
+    this.FillDashBoard = function (PageIndex) {
+
+        try {
+            $.ajax({
+                url: api_url + "/Agent/SelectAgentDashBoard",
+                cache: false,
+                type: "GET",
+                data: { },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    try {
+                        var Mydata = JSON.parse(data);
+                        var RecordCount = "0";
+                        var html = "";
+                        if (Mydata.length > 0) {
+
+                            $.each(Mydata, function (key, val) {
+                                //$("#OpenTkts").val(150);
+                                $('#OpenTkts').html(val.OpnTkts);
+                                $('#PendingTkts').html(val.Tasks);
+                                $('#ResolvedTkts').html(val.ResTickets);
+                                $('#OverDueTkts').html(val.OverDue);
+
+                            });
+                        }
+                        $("#Grid").html(html);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+
+                },
+                Error: function (response) {
+                    try {
+                        alert('ExceptionType: ' + r.ExMessge);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+                }
+
+
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+    }
+}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html class="ie ie6 no-js" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="ie ie7 no-js" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="ie ie8 no-js" lang="en"> <![endif]-->
+<!--[if IE 9 ]>    <html class="ie ie9 no-js" lang="en"> <![endif]-->
+<!--[if gt IE 9]><!--><html class="no-js" lang="en"><!--<![endif]-->
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>: Support Tickets ::</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        
+        
+    
+      
+       <link rel="stylesheet" type="text/css" href="UserLogin/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="UserLogin/css/style1.css" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+        
+        <!--<link href="Login/css/demo3.css" rel="stylesheet" type="text/css" media="all" />
+		<script type="text/javascript" src="Login/js/modernizr.custom.86080.js"></script>-->
+    </head>
+    
+    <body  style="background-color:#FFF">
+    
+        
+    <div class="container">
+        
+            <!-- Codrops top bar -->
+      <div class="codrops-top">
+                <span class="right">
+                   <!-- <a href="#">Home:</a>
+                    <a href="#" target="_blank">Home:</a>-->
+                    <a href="Home/AgentLogin">
+                        <strong>Agent Login</strong>
+                    <a href="Home/UserLogin">
+                        <strong>User Login</strong>
+                    </a>
+                </span>
+                <div class="clr"></div>
+            </div><!--/ Codrops top bar -->
+            
+        </div>
+    <div class="codrops-top3" style="width:90%; background:url(images/1.jpg); margin-top:24px; margin:auto; padding:0px; background: #FFF; padding-left: border:solid 1px #666666;">
+      <h1 style="font-size:27px; color:#666;font-weight:bold; "><br>About Us</h1><br><a href="http://www.perfectlimited.com" target="_blank"><span style=" color:#C00; font-size:24px;">Innovation with<span style="color:#1540f9; font-size:29px;"> PERFECTION</span></span></a><br><br>
+          <span style="font-size:14px; color:#333; text-align:justify;margin-left:45px;">  Perfect Software Solutions was started in the year of 2000 as Partnership Company and then incorporated to Private Limited Company on 2003. Perfect have a team of well-experienced professionals from the software development field who had worked in challenging and demanding projects including overseas projects. The company has been providing development and consultation services to the customers mainly in the banking sector. Perfect provide on site consulting and Product/Application development services to the customers in all the areas of business.<br><br></span>
+          <a href="http://www.perfectlimited.com" target="_blank"> <span style="font-size:16px; color:#B2511C; text-align:justify;font-weight:bold;">   Quality Standards</span></a>
+         <br /><span style="font-size:14px; color:#333; text-align:justify;margin-left:45px;"> With a vision aimed at 100% customer satisfaction, Perfect provides skilled quality engineering services to the corporate clients to meet the information technology demand of developing enterprises without compromising on the Quality and Performance of the Software and Service. Prefect's strength is a team of well-trained, skilled engineers having experience in all the aspects of software development. We are certified ISO 9001:2008. We do not compromise on the Quality Standards of our Software and Service<br><br></span>
+          <a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:16px; color:#B2511C; text-align:justify;font-weight:bold;">        Products <br /></span></a>
+<span style="font-size:14px; color:#333; text-align:justify;margin-left:45px;">The Software packages are developed using latest development tools with object-oriented methods. Solutions are provided in Asp .Net ,C# and VB with SQL SERVER 2008/2012/14 as back end, in Windows/LINUX platform. Our main packages are in the banking sector – TBA and CBS. Our banking packages are now running over 900 + installations in Kerala, Pondicherry and Lakshadweep. We cater to the needs of all types of Co-operative Banks including State Co-operative Banks, District Co-operative Banks, Primary Agricultural Banks, Service Co-operative Banks, Urban Banks, Rural Banks.<br></span>
+<span style="font-size:14px; color:#333; text-align:justify;margin-left:45px;">We had also developed a wide range of products for the entire Cooperative sector including Housing Co-operative Societies, Employees Societies, Marketing societies, Vanitha societies and Co-operative Hospitals. We also provide software for other related activities of the Co-operative societies like Neethi Medical Store, Retail and Fertilizer depots. We provide Multiple delivery channels for our software including ATM, CDM, Information Kiosk, SMS Banking, BC Module, Automatic Passbook Printing.<br><br></span>
+<a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:16px; color:#B2511C; text-align:justify;font-weight:bold;"> Market Reach and Support<br></span></a>
+<span style="font-size:14px; color:#333; text-align:justify;margin-left:45px;">We are the software vendor with maximum market share in the Kerala State in Co-operative Banking Sector. We have installations and support personnels in all districts of Kerala with over 1500+ installations in the Cooperative Sector Channel Partners We had assigned channel partners in the Southern States for the distribution of our banking package. Negotiation with other leading IT companies are undergoing to distribute the package in other states also. </span><br><br>
+            <div class="clr"></div>
+<a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:27px; color:#666; text-align:justify;font-weight:bold;margin-left:45px;">CORPORATE OFFICE</span></a><br />
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Perfect Software Solutions (Clt) Pvt Ltd.6/1240 C, <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Ist Floor, Mootolikandy Road, Near Red Cross Road, <br /></span>
+            <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Calicut 673 032. Kerala, India<br /></span>
+            <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Phone: +91 4 9 5 - 2 3 6 5 5 5 6 <br /></span>
+            <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;text-transform:lowercase">Email : contact@perfectlimited.com contact@perfectlimited.com<br /></span>
+        <a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;text-transform:lowercase">www.perfectlimited.com</span></a><br /><br />
+        <a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:20px; color:#333; text-align:justify;margin-left:45px;">BRANCHES</span><br /></a>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Pondicherry <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Wayanad <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Pathanamthitta <br /><br /></span>
+        <a href="http://www.perfectlimited.com" target="_blank"><span style="font-size:20px; color:#333; text-align:justify;margin-left:45px;">SUPPORT CENTRES</span><br /></a>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Thiruvanthapuram <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Ernakulam <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Palakkad <br /></span>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;">Kannur <br /></span><br /><br />
+    </div>
+    </body>
+    
+        
+</html>

@@ -1,0 +1,244 @@
+﻿var ObjSettings = new Settings();
+var isValidation = 0;
+function Settings() {
+
+    this.init = function () {
+
+        try {
+            this.Show(1);
+            this.Clear();
+            //this.FillAgentDropdown();
+            //this.FillGrid();
+
+           
+
+
+        }
+        catch (ex) {
+            alert(ex + 'Initialize Settings')
+        }
+    };
+
+
+    this.Clear = function () {
+        $('#SettingsId').val("");
+        $('#chkAuto').prop("checked", false);
+        $('#txtPrefix').val("");
+        $("#txtPrefix").removeClass("validateerror");
+        isValidation = 0;
+    };
+
+
+
+    this.Show = function (id) {
+
+        if (id == 1) {
+            
+            $("#AddSettings").show();
+
+        }
+        else {
+            $("#AddSettings").hide();
+            
+
+        }
+    };
+    this.Validate = function () {
+        if (isValidation == 1) {
+            var _Error = 0;
+            if ($('#txtPrefix').val().trim() == "") {
+                $('#txtPrefix').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtPrefix').removeClass("validateerror");
+            }
+
+        }
+
+    }
+
+    this.Submit = function () {
+        isValidation = 1;
+        if (this.Validate() <= 0) {
+            ObjSettings.Save();
+        }
+        else {
+
+            return false;
+        }
+    };
+
+
+    this.Save = function () {
+        try {
+
+            var ObjBlSettings = {
+                MasterID: $('#SettingsId').val() == '' ? '0' : $('#SettingsId').val(),
+                Prefix: $('#txtPrefix').val().trim(),
+                AutoGen: $('#chkAuto').is(":checked")
+            };
+            //alert($('#fileUpload').val().trim());
+            var DATA = JSON.stringify(ObjBlSettings);
+            $.ajax({
+                url: api_url + '/Settings/UpdateSettings',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                data: DATA,
+                dataType: 'json',
+                success: function (data) {
+                    try {
+                        if (data.statusCode > 0) {
+                            if ($('#SettingsId').val() == '' ? '0' : $('#AgentId').val() == 0) {
+                                MessageText(data.statusCode, 'Saved Successfully', '#txtPrefix');
+                            }
+                            else {
+                                MessageText(data.statusCode, 'Updated Successfully', '#txtPrefix');
+                            }
+
+                            ObjAgent.init();
+                        }
+                        else {
+                            MessageText(data.statusCode, '', '#txtPrefix');
+                        }
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+                },
+                error: function (error) {
+                    alert(error + ' : UpdateSettings');
+
+                }
+
+            });
+        }
+        catch (e) {
+            alert(e + '   : /Settings/UpdateSettings');
+        }
+
+
+
+
+    }
+
+    //this.FillAgentDropdown = function () {
+    //    try {
+    //        $.ajax({
+                
+    //            url: api_url + '/Settings/AgentDropDownFill',
+    //            cache: false,
+    //            type: 'POST',
+    //            dataType: 'json',
+    //            contentType: 'application/json; charset=utf-8',
+    //            success: function (data) {
+    //                var Mydata = JSON.parse(data);
+    //                if (Mydata.length > 0) {
+    //                    var optionhtml = '<option value=' + 0 + '>Select</option>';
+    //                    try {
+    //                        $.each(Mydata, function (i, value) {
+    //                            optionhtml += '<option value=' + value.ID_Agent + '>' + value.AgName + '</option>';
+    //                        });
+    //                    }
+    //                    catch (exx) {
+    //                        alert(exx);
+    //                    }
+    //                }
+    //                $('#ddlAgent').html(optionhtml);
+    //            },
+
+    //            error: function (xhr, status, error) {
+    //                var err = eval('(' + xhr.responseText + ')');
+    //                alert(err.Message);
+    //            }
+
+    //        });
+    //    }
+    //    catch (ex) {
+    //        alert(ex + ' Exception FillAgentDropdown');
+    //    }
+    //}
+
+ 
+  
+
+    //this.FillGrid = function (PageIndex) {
+    //    try {
+    //        $.ajax({
+    //            url: api_url + "/Settings/SelectPagesAll",
+    //            cache: false,
+    //            type: "GET",
+    //            data: { 'PageIndex': PageIndex, 'FK_DropDownAgent': $('#ddlAgent option:selected').val() },
+    //            dataType: 'json',
+    //            contentType: 'application/json; charset=utf-8',
+    //            success: function (data) {
+    //                try {
+    //                    var Mydata = JSON.parse(data);
+    //                    var RecordCount = "0";
+    //                    var html = "";
+    //                    if (Mydata.length > 0) {
+
+    //                        html += "<table width = '100%' id='example1' class='table table-bordered table-striped'>" +
+    //                                  "<thead background-color='rgb(60, 141, 188)'>" +
+    //                                      "<tr id='headtr'>" +
+    //                                      "<th style = 'display:none' width  = '10%' >ID_Pages</th>" +
+    //                                       "<th width  = '10%' >SlNo</th>" +
+    //                                      "<th width  = '20%' >PageName</th>" +
+    //                                      "<th><input type='checkbox' id='checkAllAdd'   />  Add </th>" +
+    //                                       "<th><input type='checkbox' id='checkAllUpdate'/>  Update </th>" +
+    //                                      "<th><input type='checkbox' id='checkAllDelete' />  Delete </th>" +
+    //                                      "<th><input type='checkbox' id='checkAllView' />  View </th>" +
+    //                                      "</tr>" +
+    //                                  "</thead>";
+
+    //                        $.each(Mydata, function (key, val) {
+    //                            var htmlActionTd = "<td>" +
+    //                                               "<input type ='checkbox' class='icheck' id = 'checkAdd' " + val.Add + ">" + "</input>" +
+    //                                               "</td>" +
+    //                                               "<td>" +
+    //                                               "<input type ='checkbox' class='icheck' id = 'Update' " + val.Update + ">" + "</input>" +
+    //                                               "</td>" +
+    //                                               "<td>" +
+    //                                               "<input type ='checkbox' class='icheck' id = 'Delete' " + val.Delete + ">" + "</input>" +
+    //                                               "</td>" +
+    //                                                "<td>" +
+    //                                               "<input type ='checkbox' class='icheck' id = 'View' " + val.View + ">" + "</input>" +
+    //                                               "</td>";
+    //                            html += "<tr>" +
+
+    //                                        "<td style = 'display:none' >" + val.ID_Pages+ "</td>" +
+    //                                        "<td>" + val.SlNo + "</td>" +
+    //                                        "<td>" + val.PageName + "</td>" +
+    //                                        htmlActionTd +
+    //                                        "</tr>";
+    //                            RecordCount = val.RecordCount;
+
+    //                        });
+
+
+    //                        $("#Grid").html(html);
+    //                    }
+    //                }
+    //                catch (ex) {
+    //                    alert(ex);
+    //                }
+
+    //            },
+    //            Error: function (response) {
+    //                try {
+    //                    alert('ExceptionType: ' + r.ExMessge);
+    //                }
+    //                catch (ex) {
+    //                    alert(ex);
+    //                }
+    //            }
+
+
+    //        });
+    //    }
+    //    catch (e) {
+    //        alert(e);
+    //    }
+    //}
+}

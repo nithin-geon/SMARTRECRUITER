@@ -1,0 +1,61 @@
+﻿@{
+    ViewBag.Title = "UserDashboard";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+
+ <script src="~/js/Masters/Menu.js"></script>
+    <script>        
+          var api_url = '@ViewBag.api_url'
+        $(document).ready(function () {          
+            ObjMenu.GetPostreplayCount(api_url);
+           
+           
+        });
+    </script>
+
+
+<h2>My Dashboard</h2>
+
+  <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <h1>
+          Top Navigation
+          <small>Example 2.0</small>
+        </h1>
+        <ol class="breadcrumb">
+          <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+          <li><a href="#">Layout</a></li>
+          <li class="active">Top Navigation</li>
+        </ol>
+      </section>
+
+      <!-- Main content -->
+      <section class="content">
+         
+        
+        <div class="callout callout-info">
+          <h4>Tip!</h4>
+
+          <p>Welcome to the Support Ticket of Perfect Software Solution Ltd.
+               You are pleased to write the queries and complaints in this sapplication for a good and better solution.</p>
+           
+        </div>
+        <div class="callout callout-danger">
+          <h4>Warning!</h4>
+
+          <p>The construction of this layout differs from the normal one. In other words, the HTML markup of the navbar
+            and the content will slightly differ than that of the normal layout.</p>
+        </div>
+        <div class="box box-default">
+          <div class="box-header with-border">
+            <h3 class="box-title">Blank Box</h3>
+          </div>
+          <div class="box-body">
+            The great content goes here
+          </div>
+          <!-- /.box-body -->
+        </div>
+        <!-- /.box -->
+      <div style="padding: 10px 0px; text-align: center;"><div class="text-muted">Excuse the ads! We need some help to keep our site up.</div><script async="" src="AdminLTE%202%20_%20Top%20Navigation_files/adsbygoogle.js"></script><div class="visible-xs visible-sm"><!-- AdminLTE --><ins class="adsbygoogle" style="display: inline-block; width: 300px; height: 250px;" data-ad-client="ca-pub-4495360934352473" data-ad-slot="5866534244" data-adsbygoogle-status="done"><ins id="aswift_0_expand" style="display:inline-table;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent"><ins id="aswift_0_anchor" style="display:block;border:none;height:250px;margin:0;padding:0;position:relative;visibility:visible;width:300px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_0" name="aswift_0" style="left:0;position:absolute;top:0;" width="300" height="250" frameborder="0"></iframe></ins></ins></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div class="hidden-xs hidden-sm"><!-- Home large leaderboard --><ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-4495360934352473" data-ad-slot="1170479443" data-adsbygoogle-status="done"><ins id="aswift_1_expand" style="display:inline-table;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><ins id="aswift_1_anchor" style="display:block;border:none;height:90px;margin:0;padding:0;position:relative;visibility:visible;width:728px;background-color:transparent"><iframe marginwidth="0" marginheight="0" vspace="0" hspace="0" allowtransparency="true" scrolling="no" allowfullscreen="true" onload="var i=this.id,s=window.google_iframe_oncopy,H=s&amp;&amp;s.handlers,h=H&amp;&amp;H[i],w=this.contentWindow,d;try{d=w.document}catch(e){}if(h&amp;&amp;d&amp;&amp;(!d.body||!d.body.firstChild)){if(h.call){setTimeout(h,0)}else if(h.match){try{h=s.upd(h,i)}catch(e){}w.location.replace(h)}}" id="aswift_1" name="aswift_1" style="left:0;position:absolute;top:0;" width="728" height="90" frameborder="0"></iframe></ins></ins></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div></section>
+      <!-- /.content -->

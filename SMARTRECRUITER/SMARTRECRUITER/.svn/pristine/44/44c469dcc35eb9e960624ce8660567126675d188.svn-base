@@ -1,0 +1,6 @@
+﻿@{
+    ViewBag.Title = "Agent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Agent</h2>

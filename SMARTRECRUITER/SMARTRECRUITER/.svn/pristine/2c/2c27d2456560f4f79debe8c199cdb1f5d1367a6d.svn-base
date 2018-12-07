@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SupportTicket.Interface.Masters
+{
+    public interface IReport : ICommon
+    {
+        string FromDate { get; set; }
+        string ToDate { get; set; }
+        Int64 FK_Client { get; set; }
+        Int64 FK_Product { get; set; }
+        Int64 FK_Agent { get; set; }
+        Int16 Status { get; set; }
+    }
+}

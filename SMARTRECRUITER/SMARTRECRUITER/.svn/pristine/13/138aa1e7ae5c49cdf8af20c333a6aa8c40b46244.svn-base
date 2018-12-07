@@ -1,0 +1,133 @@
+﻿@{
+    Layout = null;
+}
+
+
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<!--<![endif]-->
+<head>
+
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>: Support Tickets ::</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="text/javascript" src="~/Login/js/jquery-2.1.4.min.js"></script>
+    <link href="~/css/Style.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    @*<link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">*@
+    <!-- Theme style -->
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Plugins/iCheck/flat/blue.css">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="~/Plugins/morris/morris.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="~/Plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="~/Plugins/datepicker/datepicker3.css">
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="~/Plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+
+    <script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/Login/css/demo.css" />
+    <link rel="stylesheet" type="text/css" href="~/Login/css/style1.css" />
+    <link href="~/Login/css/style.css" rel="stylesheet" type="text/css" media="all" />
+
+    <link href="~/Login/css/demo3.css" rel="stylesheet" type="text/css" media="all" />
+    <script type="text/javascript" src="~/Login/js/js/modernizr.custom.86080.js"></script>
+    <script src="~/js/UserLogin.js"></script>
+    <script src="~/js/ng-cap.js"></script>
+    <script>
+        var api_url = '@ViewBag.api_url'
+        $(document).ready(function () {
+            ObjUserLogin.init();
+        });
+    </script>
+</head>
+
+<body id="page">
+
+    <ul class="cb-slideshow">
+        <li><span>Image 01</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+        <li><span>Image 02</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+        <li><span>Image 03</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+        <li><span>Image 04</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+        <li><span>Image 05</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+        <li><span>Image 06</span><div>
+            <h3>Support Tickets</h3>
+        </div>
+        </li>
+    </ul>
+    <div class="container" style="width: auto;">
+
+        <!-- Codrops top bar -->
+        <div class="codrops-top">
+            <a href="#">
+                <strong>&laquo; Home: </strong>about Us &amp; 
+            </a>
+            <span class="right">
+                <a href="#">Home:</a>
+                <a href="#" target="_blank">Home:</a>
+                <a href="#">
+                    <strong>about</strong>
+                </a>
+            </span>
+            <div class="clr"></div>
+        </div>
+        <div class="main">
+            <h1>Support Tickets<br>
+                Login Here</h1>
+            <form>
+                <input id="txtUserName" type="text" value="Username" onchange="ObjUserLogin.Validate()" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" required>
+                <input id="txtPassword" type="password" value="Password" onchange="ObjUserLogin.Validate()" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required>
+
+                <div ng-app="myApp" ng-controller="myCtrl">
+                    <div class="re_btn4">
+                        <input type="text" id="txtCaptcha" class="captchabox" disabled /></div>
+                    <div class="re_btn1">
+                        <button type="button" id="btnrefresh" class="refreh_btn" ng-click="captchain = null" onclick="ObjUserLogin.DrawCaptcha();">
+                            <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>
+                        </button>
+                    </div>
+                    <div class="re_btn3">
+                        <input type="text" class="margin" ng-model="captchain" style="margin: 0px; font-size: 1.5em; width: 115%; border: solid 1px red"><br>
+                    </div>
+                    <input id="btnSubmit" type="submit" value="Login" ng-disabled="capvalid!=true" class="btn btn-primary btn-block btn-flat pull-right margin" onclick="ObjUserLogin.Submit()">
+                </div>
+            </form>
+
+
+        </div>
+        <!--/ Codrops top bar -->
+
+    </div>
+
+</body>
+
+
+</html>

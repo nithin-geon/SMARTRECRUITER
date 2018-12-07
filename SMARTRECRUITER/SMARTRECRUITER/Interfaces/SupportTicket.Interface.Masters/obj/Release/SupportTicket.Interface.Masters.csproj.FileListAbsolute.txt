@@ -1,0 +1,14 @@
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.Masters.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.Masters.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.csprojResolveAssemblyReference.cache
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.Masters.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.Masters.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\bin\Release\SupportTicket.Interface.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.csprojResolveAssemblyReference.cache
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Masters\obj\Release\SupportTicket.Interface.Masters.pdb

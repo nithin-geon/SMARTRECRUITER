@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Data;
+using SupportTicket.Business;
+using SupportTicket.Interface;
+
+using SupportTicket.Business.Masters;
+using SupportTicket.Interface.Masters;
+using System.Text;
+using System.Configuration;
+using SupportTicket.Models;
+using SupportTicket.Filters;
+
+
+namespace SupportTicket.Controllers
+{    
+    public class UserTicketsController : Controller
+    {
+        //
+        // GET: /User/
+        public UserTicketsController()
+        {
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+        }
+        public ActionResult UserTickets()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        public JsonResult SelectAllTickets(string PageIndex = "1")
+        {
+            try
+            {
+
+                int statusCode = 1;
+                DataTable dtbl = new DataTable();
+                BlUserTickets blusertickets = new BlUserTickets();
+                blusertickets.UserCode = Convert.ToInt64(Session["ID_Agent"]);
+                blusertickets.FK_Company = Convert.ToInt64(Session["ID_Company"]);
+                blusertickets.PageIndex = Convert.ToInt32(PageIndex);
+                dtbl = blusertickets.SelectAllData();
+                return Json(Converttojson(dtbl), JsonRequestBehavior.AllowGet);
+
+            }
+            catch (Exception ex)
+            {
+                ///
+                return Json(ex);
+            }
+
+        }
+
+
+        public string Converttojson(DataTable table)
+        {
+            System.Web.Script.Serialization.JavaScriptSerializer serializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            List<Dictionary<string, object>> rows = new List<Dictionary<string, object>>();
+            Dictionary<string, object> row;
+            foreach (DataRow dr in table.Rows)
+            {
+                row = new Dictionary<string, object>();
+                foreach (DataColumn col in table.Columns)
+                {
+                    row.Add(col.ColumnName, dr[col]);
+                }
+                rows.Add(row);
+            }
+            return serializer.Serialize(rows);
+
+        }
+
+
+
+    }
+}

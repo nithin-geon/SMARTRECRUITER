@@ -1,0 +1,519 @@
+﻿var objTickets = new Tickets();
+function Tickets() {
+
+    this.init = function () {
+        try {
+            this.Show(1);
+            this.Clear();
+            this.FillGrid();
+            this.FillProductDropdown();
+            this.FillTopicDropdown();
+        } catch (ex) {
+            alert(ex + 'Initialise Tickets')
+
+        }
+    }
+    this.Clear = function () {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+
+        var yyyy = today.getFullYear();
+        if (dd < 10) { dd = '0' + dd } if (mm < 10) { mm = '0' + mm } today = dd + '/' + mm + '/' + yyyy;
+
+        $('#txtDate').attr('value', today);
+        $('#hfTicketsId').val("");
+        $('#txtTicketNo').val("");
+        $("#txtTicketNo").removeClass("validateerror");
+        $('#ddlPriority').val(0);
+        $("#ddlPriority").removeClass("validateerror");
+        $('#ddlStatus').val(0);
+        $("#ddlStatus").removeClass("validateerror");
+        $('#ddlProduct').val(0);
+        $("#ddlProduct").removeClass("validateerror");
+        $('#ddlTopic').val(0);
+        $("#ddlTopic").removeClass("validateerror");
+        $('#txtSubject').val("");
+        $("#txtSubject").removeClass("validateerror");
+        $('#txtDescription').val("");
+        $("#txtDescription").removeClass("validateerror");
+        isValidation = 0;
+    };
+    this.Show = function (id) {
+        if (id == 1) {
+            $("#AddTickets").hide();
+            $("#ViewTickets").show();
+            $("#divDetails").attr("style", "display:none");
+        }
+        else {
+            $("#ViewTickets").hide();
+            $("#AddTickets").show();
+            $("#divDetails").attr("style", "display:none");
+        }
+    };
+    this.FillProductDropdown = function () {
+        try {
+            $.ajax({
+
+                url: api_url + '/Tickets/ProductDropDownFill',
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        var optionhtml = '<option value=' + 0 + '>Select</option>';
+                        try {
+                            $.each(Mydata, function (i, value) {
+                                optionhtml += '<option value=' + value.ID_Product + '>' + value.ProdName + '</option>';
+                            });
+                        }
+                        catch (exx) {
+                            alert(exx);
+                        }
+                    }
+                    $('#ddlProduct').html(optionhtml);
+                },
+
+                error: function (xhr, status, error) {
+                    var err = eval('(' + xhr.responseText + ')');
+                    alert(err.Message);
+                }
+
+            });
+        }
+        catch (ex) {
+            alert(ex + ' Exception FillProductDropdown');
+        }
+    }
+    this.FillTopicDropdown = function () {
+        try {
+            $.ajax({
+
+                url: api_url + '/Tickets/TopicDropDownFill',
+                cache: false,
+                type: 'POST',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        var optionhtml = '<option value=' + 0 + '>Select</option>';
+                        try {
+                            $.each(Mydata, function (i, value) {
+                                optionhtml += '<option value=' + value.ID_Topic + '>' + value.TopicName + '</option>';
+                            });
+                        }
+                        catch (exx) {
+                            alert(exx);
+                        }
+                    }
+                    $('#ddlTopic').html(optionhtml);
+                },
+
+                error: function (xhr, status, error) {
+                    var err = eval('(' + xhr.responseText + ')');
+                    alert(err.Message);
+                }
+
+            });
+        }
+        catch (ex) {
+            alert(ex + ' Exception FillTopicDropdown');
+        }
+    }
+    this.Validate = function () {
+
+        if (isValidation == 1) {
+            var _Error = 0;
+
+            if ($('#txtTicketNo').val() == "") {
+                $('#txtTicketNo').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtTicketNo').removeClass("validateerror");
+            }
+
+            if ($('#ddlPriority option:selected').val() == '0') {
+                $('#ddlPriority').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#ddlPriority').removeClass("validateerror");
+            }
+            if ($('#ddlStatus option:selected').val() == '0') {
+                $('#ddlStatus').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#ddlStatus').removeClass("validateerror");
+            }
+            if ($('#ddlProduct option:selected').val() == '0') {
+                $('#ddlProduct').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#ddlProduct').removeClass("validateerror");
+            }
+            if ($('#ddlTopic option:selected').val() == '0') {
+                $('#ddlTopic').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#ddlTopic').removeClass("validateerror");
+            }
+            if ($('#txtDescription').val() == "") {
+                $('#txtDescription').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtDescription').removeClass("validateerror");
+            }
+            return _Error;
+        }
+
+    }
+    this.Submit = function () {
+        isValidation = 1;
+        if (this.Validate() <= 0) {
+            objTickets.Save();
+        }
+        else {
+
+            return false;
+        }
+    };
+    this.Save = function () {
+        try {
+            var ObjBlTickets = {
+                MasterID: $('#hfTicketsId').val() == '' ? '0' : $('#hfTicketsId').val(),
+                TickNo: $('#txtTicketNo').val(),
+                TickDate: $('#txtdate').val(),
+                TickSubject: $('#txtSubject').val(),
+                Description: $('#txtDescription').val(),
+                TickPriority: $('#ddlPriority option:selected').val(),
+                TickStatus: $('#ddlStatus option:selected').val(),
+                FK_Product: $('#ddlProduct option:selected').val(),
+                FK_Topic: $('#ddlTopic option:selected').val()
+            };
+
+            var DATA = JSON.stringify(ObjBlTickets);
+            $.ajax({
+                url: api_url + '/Tickets/UpdateTickets',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                data: DATA,
+                dataType: 'json',
+                success: function (data) {
+                    try {
+                        if (data.statusCode == -2) {
+                            alert("Duplicate Entry");
+                            $('#txtTicketNo').focus();
+                        }
+                        else if (data.statusCode == -1) {
+                            alert("Failed");
+                        }
+                        else if (data.statusCode > 0) {
+                            alert("Successfull");
+                            objTickets.init();
+                        }
+                        else {
+                            alert("Try After Some time");
+                        }
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+                },
+                error: function (error) {
+                    alert(error + ' : UpdateTickets');
+
+                }
+
+            });
+        }
+        catch (e) {
+            alert(e + '   : /Tickets/UpdateTickets');
+        }
+    }
+    this.FillGrid = function (PageIndex) {
+
+        try {
+            $.ajax({
+                url: api_url + "/Tickets/SelectTicketsAll",
+                cache: false,
+                type: "GET",
+                data: { 'PageIndex': PageIndex },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    try {
+                        var Mydata = JSON.parse(data);
+                        var RecordCount = "0";
+                        var html = "";
+                        if (Mydata.length > 0) {
+
+                            html += "<table width = '100%' id='example1' class='table table-bordered table-striped'>" +
+                                      "<thead background-color='rgb(60, 141, 188)'>" +
+                                          "<tr>" +
+                                          "<th style = 'display:none' width  = '10%' >ID_Tickets</th>" +
+                                           "<th width  = '20%' >SlNo</th>" +
+                                          "<th width  = '20%' >Ticket No</th>" +
+                                          "<th width  = '15%' >Date</th>"+
+                                          "<th width  = '25%' >Subject</th>" +
+                                          "</tr>" +
+                                      "</thead>";
+
+                            $.each(Mydata, function (key, val) {
+
+                                var htmlActionTd = "<td>" +
+                                                   "<a href ='javascript:void(0)' onclick = 'objTickets.FillTimeline(" + val.ID_Tickets + ")' class='edit'><i class='glyphicon glyphicon-list-alt'></i>" + "</a>" +
+                                                   //"<a href ='javascript:void(0)' onclick = 'ObjAgent.DeleteAgent(" + val.ID_Tickets + ")' class='remove'><i class='glyphicon glyphicon-trash'></i>" + "</a>" +
+                                                   "</td>";
+                                html += "<tr>" +
+
+                                            "<td style = 'display:none'>" + val.ID_Tickets + "</td>" +
+                                            "<td>" + val.SlNo + "</td>" +
+                                            "<td>" + val.TickNo + "</td>" +
+                                            "<td>" + ToJavaScriptDate(val.TickDate)  + "</td>" +
+                                            "<td>" + val.TickSubject + "</td>" +
+                                            htmlActionTd +
+                                            "</tr>";
+                                RecordCount = val.RecordCount;
+
+                            });
+
+                            try   //Page Indexing Starts here
+                            {
+                                var temppagecount = parseInt(RecordCount) / 10
+
+                                var pageCount = parseInt(Math.ceil(parseFloat(temppagecount)))
+                                if (!PageIndex) {
+                                    PageIndex = 1;
+                                }
+
+                                var i;
+
+                                if (parseInt(PageIndex) <= 10) {
+                                    i = 1;
+                                }
+                                else {
+
+                                    i = PageIndex;
+                                    var j = parseInt(i) % 10;
+                                    if (parseInt(j) == parseInt(0)) {
+                                        i = parseInt(i) - parseInt(9);
+                                    }
+                                    else {
+                                        i = (parseInt(i) - parseInt(j) + parseInt(1));
+                                    }
+
+                                }
+
+                                if (parseInt(pageCount) > 0) {
+                                    html += "</table><div class='box-footer clearfix'><ul class='pagination pagination-sm no-margin pull-right'>" +
+                                        "<li><a href ='javascript:void(0)' onclick = 'ObjAgent.FillGrid(1)' class= '" + (parseInt(PageIndex) > parseInt(1) ? "activeAnchor" : "not-activeAnchor") + " '>First</a></li>" +
+                                   "<li><a href ='javascript:void(0)'  onclick = 'ObjAgent.FillGrid(" + (parseInt(i) - parseInt(10)) + ")'   class= '" + (parseInt(i) > parseInt(1) ? "activeAnchor" : "not-activeAnchor") + " '>«</a></li>"
+                                    while (parseInt(i) <= parseInt(pageCount)) {
+                                        html += "<li><a href ='javascript:void(0)' onclick = 'ObjAgent.FillGrid(" + i + ")'  class='" + (parseInt(i) != parseInt(PageIndex) ? "activeAnchor" : "not-activeAnchor") + "'   >" + i + "</a></li>"
+                                        if (parseInt(i) % parseInt(10) == 0) {
+                                            break;
+                                        }
+                                        i++;
+                                    }
+                                    html += "<li><a href ='javascript:void(0)' onclick = 'ObjAgent.FillGrid(" + (parseInt(i) + parseInt(1)) + ")'   class= '" + ((parseInt(pageCount) - parseInt(PageIndex)) > 10 ? "activeAnchor" : "not-activeAnchor") + " ' >»</a></li>" +
+                                    "<li><a href ='javascript:void(0)' onclick = 'ObjAgent.FillGrid(" + pageCount + ")'   class= '" + (parseInt(PageIndex) < parseInt(pageCount) ? "activeAnchor" : "not-activeAnchor") + "'>Last</a></li>" +
+                                   "</ul></div>";
+
+                                }
+                            }   //Page Indexing Starts here
+                            catch (er) {
+                                alert(er + 'Page Indexing');
+                            }
+                        }
+                        $("#Grid").html(html);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+
+                },
+                Error: function (response) {
+                    try {
+                        alert('ExceptionType: ' + r.ExMessge);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+                }
+
+
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+    }
+
+
+    this.FillTickets = function (ID_Tickets) {
+        $.ajax({
+            url: api_url + "/Tickets/FillTickets",
+            data: { 'ID_Tickets': ID_Tickets },
+            cache: false,
+            type: 'Get',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                try {
+                    var Mydata = JSON.parse(data);
+                    if (Mydata.length > 0) {
+                        $.each(Mydata, function (key, value) {
+                            var ObjBlTickets = value;
+                            $('#hfTicketsId').val(objTickets.ID_Tickets);
+                            $('#txtTicketNo').val(objTickets.TickNo);
+                            $('#txtdate').val(objTickets.TickDate);
+                            $('#txtSubject').val(objTickets.TickSubject);
+                            $('#ddlPriority').val(objTickets.TickPriority);
+                            $('#ddlStatus').val(objTickets.TickStatus);
+                            $('#ddlProduct').val(objTickets.FK_Product);
+                            $('#ddlTopic').val(objTickets.FK_Topic);
+                            
+                        }
+                        )
+                    };
+                    ObjAgent.Show(2);
+                }
+                catch (e) {
+                    alert(e + 'FillTickets');
+                }
+
+            }
+        });
+
+    }
+
+    this.FillTimeline = function (ID_Tickets) {
+        $("#ViewTickets").hide();
+        $("#AddTickets").hide();
+        $("#divDetails").attr("style", "display:block");
+        try {
+            $.ajax({
+                url: api_url + "/Tickets/SelectAgentTicketDetails",
+                cache: false,
+                type: "GET",
+                data: { 'ID_Tickets': ID_Tickets },
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    try {
+                        var Mydata = JSON.parse(data);
+                        var RecordCount = "0";
+                        var html = "";
+                        if (Mydata.length > 0) {
+                            html += "<div id='TimeLineTickets'>" +
+                                      "<div class='row'>" +
+                                          "<div class='col-xs-12'>" +
+                                          "<div class='box' style='background-color:whitesmoke;'>" +
+                                           "<div class='row'>" +
+                                          "<div class='col-md-12'>" +
+                                          "<ul class='timeline'>";
+
+                            $.each(Mydata, function (key, val) {
+                                $('#lblTicketNo').text(val.TickNo);
+                                $('#lblSubject').text(val.TickSubject);
+                                $('#lblStatus').text(val.TickStatus);
+                                $('#lblUser').text(val.TickUser);
+                                $('#lblPriority').text(val.TickPriority);
+                                $('#lblDepartment').text(val.DepName);
+                                $('#lblProduct').text(val.ProdName);
+                                $('#lblTopic').text(val.TopicName);
+                                $('#lblCreateDate').text(ToJavaScriptDateTime(val.UserDate));
+                                $('#lblLastMsg').text(ToJavaScriptDateTime(val.LastMsg) == "Sun, 31 Dec 1899 18:30:00" ? "" : ToJavaScriptDateTime(val.LastMsg));
+                                $('#lblLastResp').text(ToJavaScriptDateTime(val.LastResp) == "Sun, 31 Dec 1899 18:30:00" ? "" : ToJavaScriptDateTime(val.LastResp));
+                                var datecolor;
+                                if (val.EnteredDate != undefined)
+                                {
+                                    if (val.UserCode > 0) { datecolor = 'bg-green' } else { datecolor = 'bg-blue' }
+                                    html += "<li class='time-label'>" +
+                                            "<span class='" + datecolor + "'>" +
+                                             ToJavaScriptDate(val.EnteredDate) +
+                                            "</span>" +
+                                            "</li>"; 
+                                }
+                                if (val.AgentFrom > 0) {
+                                    html += "<li>" +
+                                            "<i class='fa fa-mail-forward bg-blue'></i>" +
+                                            "<div class='timeline-item'>" +
+                                            "<span class='time'><i class='fa fa-clock-o'></i>" +
+                                            ToJavaScriptDateTime(val.EnteredOn) +
+                                            "</span>" +
+                                            "<h3 class='timeline-header' style='background-color: #73ecf599;'>" +
+                                            "<a href='#' style='pointer-events: none;cursor: default;font-size: 22px'>" + val.AgentFromName + "</a>  Assigned to  <a href='#' style='pointer-events: none;cursor: default;font-size: 22px;'>" + val.AgentToName + "</a>" +
+                                            "</h3>";
+                                }
+                                else {
+                                    var color; var Icon; var person; var statuscolor;
+                                    if (val.UserCode > 0) { color = '#73f59499;'; Icon = 'fa fa-user bg-green'; person = '<a href="#" style="pointer-events: none;cursor: default;font-size: 22px;">' + val.UsName + '</a>  Posted'; }
+                                    else { color = '#73ecf599;'; Icon = 'fa fa-user-md bg-blue'; person = '<a href="#" style="pointer-events: none;cursor: default;font-size: 22px;">' + val.AgentName + '</a>  Posted'; }
+                                    if (val.TransStatus == 1) { statuscolor = 'btn btn-StatusOpen btn-xs'; } else if (val.TransStatus == 2) { statuscolor = 'btn btn-StatusResolved btn-xs'; } else { statuscolor = 'btn btn-StatusClosed btn-xs'; }
+                                    html += "<li>" +
+                                            "<i class='" + Icon + "'></i>" +
+                                            "<div class='timeline-item'>" +
+                                            "<span class='time'><i class='fa fa-clock-o'></i>" +
+                                            ToJavaScriptDateTime(val.EnteredOn) +
+                                            "</span>" +
+                                            "<h3 class='timeline-header' style='background-color: " + color + "'>" +
+                                            person  +
+                                            "</h3>" +
+                                            "<div class='timeline-body'  style='background-color: " + color + "'>" +
+                                            val.Description +
+                                            "</div>" +
+                                            "<div class='timeline-footer'  style='background-color: " + color + "'>" +
+                                            "<a class='" + statuscolor + "'>" +
+                                            val.TransStatusName +
+                                            "</a>" +
+                                            "</div>" +
+                                            "</div>" +
+                                            "</li>";
+                                }
+                                        
+
+                            });
+
+                            html += "<li>" +
+                                        "<i class='fa fa-clock-o bg-gray'></i>" +
+                                        "</li>" +
+                                        "</ul>" +
+                                        "</div>" +
+                                         "</div>" +
+                                         "</div>" +
+                                          "</div>" +
+                                         "</div>" +
+                                         "</div>";
+                        }
+                        $("#divTimeline").html(html);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+
+                },
+                Error: function (response) {
+                    try {
+                        alert('ExceptionType: ' + r.ExMessge);
+                    }
+                    catch (ex) {
+                        alert(ex);
+                    }
+                }
+            });
+        }
+        catch (e) {
+            alert(e);
+        }
+    }
+}

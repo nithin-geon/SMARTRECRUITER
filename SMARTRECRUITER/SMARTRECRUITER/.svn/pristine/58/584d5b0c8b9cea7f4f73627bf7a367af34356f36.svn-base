@@ -1,0 +1,46 @@
+﻿using SupportTicket.Business;
+using SupportTicket.Business.Masters;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+
+namespace SupportTicket.Controllers
+{
+    public class PartialController : Controller
+    {
+        //
+        // GET: /Partial/
+        public PartialController()
+        {
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+
+
+        }
+        public ActionResult _Layout()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public JsonResult FillMenu()
+        {
+            string aa = "   <ul class='treeview-menu'>" +
+                             " <li><a href='~/Product/Product'><i class='fa fa-circle-o text-aqua'></i>Product</a></li>" +
+                              "<li><a href='~/Agent/Agent'><i class='fa fa-circle-o text-aqua'></i>Agent</a></li>" +
+                         " </ul>";
+
+            ViewBag.api_url = ConfigurationManager.AppSettings["api-url"];
+            return Json(new { statusCode = "" + aa + "" }, JsonRequestBehavior.AllowGet);
+        }
+
+
+
+
+    }
+}

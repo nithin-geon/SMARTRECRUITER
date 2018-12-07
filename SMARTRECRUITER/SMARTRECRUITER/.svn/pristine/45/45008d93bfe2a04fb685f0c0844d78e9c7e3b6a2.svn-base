@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SupportTicket.Interface.Masters
+{
+    public interface ITickets:ICommon
+    {
+        string TickNo { get; set; }
+        DateTime TickDate { get; set; }
+        string TickSubject { get; set; }
+        Int16 TickPriority { get; set; }
+        Int16 TickStatus { get; set; }
+        Int64 FK_Product { get; set; }
+        Int64 FK_Topic { get; set; }
+        Int64 AgentCode { get; set; }
+    }
+}

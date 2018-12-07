@@ -1,0 +1,151 @@
+﻿@{
+    ViewBag.Title = "Client";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/Client.js"></script>
+<script>
+    var api_url = '@ViewBag.api_url'
+    $(document).ready(function () {
+        objClient.init();
+    });
+</script>
+<section class="content-header">
+    <h1>Client
+            <small>Master</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="ViewClient">
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"></h3>
+                        <div class="btn-group pull-left">
+                            <button id="btnAddNew" class="btn btn-primary" onclick="objClient.Show(2)">
+                                Add New <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div id="Grid" class="box-body">
+                    </div>
+                </div>
+
+            </div>
+            <div id="AddClient" style="display: none;">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Add Client</h3>
+                        <div class="btn-group pull-right">
+                            <button id="btnBack" class="btn btn-primary" onclick="objClient.init()">
+                                <i class="fa fa-arrow-up"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <div class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Client Code<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="hidden" id="hfClientId" value="0" />
+                                    <input type="text" class="form-control" id="txtClientCode" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Client Name<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtClientName" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Address1<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtAddress1" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Address2<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtAddress2" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Address3<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtAddress3" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Email<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtEmail" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Mobile<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtMobile" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Phone<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtPhone" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Re-Seller<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <select id="ddlReseller" class="form-control" onchange="objClient.Validate()">
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Sort Order<span style="color: red">*</span></label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control" id="txtClientSortOrder" onchange="objClient.Validate()" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                  <div class="icheckbox_flat-green checked" style="position: relative;" aria-checked="false" aria-disabled="false"><input class="flat-red" checked="" style="position: absolute; opacity: 0;" type="checkbox"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+
+                  <div class="icheckbox_flat-green" style="position: relative;" aria-checked="false" aria-disabled="false"><input class="flat-red" style="position: absolute; opacity: 0;" type="checkbox"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+
+                  <div class="icheckbox_flat-green disabled" style="position: relative;" aria-checked="false" aria-disabled="true"><input class="flat-red" disabled="" style="position: absolute; opacity: 0;" type="checkbox"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255) none repeat scroll 0% 0%; border: 0px none; opacity: 0;"></ins></div>
+                  
+              </div>
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <div class="btn-group pull-right">
+                                <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="objClient.Submit()">Submit</button>
+
+                                &nbsp;&nbsp
+                           <button type="reset" id="btnClear" class="btn btn-primary" onclick="objClient.Clear()">Clear</button>
+
+                            </div>
+
+
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+
+</section>

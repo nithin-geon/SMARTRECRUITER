@@ -1,0 +1,39 @@
+﻿
+
+
+
+function CheckInteger(e) {
+    var t = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
+    8 != t && 9 != t && (48 > t || t > 57) && (e.preventDefault ? e.preventDefault() : e.returnValue = !1)
+}
+
+function CheckMobileNumber(inputtxt)
+{   
+    try
+    {
+        //alert(inputtxt.value);
+        alert($('#txtAgentMobile').val());
+        if ($('#txtAgentMobile').val() == "") {
+            $('#txtAgentMobile').addClass("validateerror");
+            inputtxt = "";
+            return false;
+        }
+        else {
+            var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            if ((inputtxt.value.match(phoneno))) {
+                $('#txtAgentMobile').removeClass("validateerror");
+                return true;
+            }
+            else {
+                //alert("Enter correctly");
+                $('#txtAgentMobile').addClass("validateerror");
+                inputtxt = "";
+                return false;
+            }
+        }
+    }
+    catch(e)
+    {
+        alert(e+'CheckMobileNumber')
+    }
+} 

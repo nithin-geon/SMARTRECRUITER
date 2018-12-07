@@ -1,0 +1,37 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using System.Reflection;
+using System.Web.Routing;
+
+
+namespace SupportTicket.Filters
+{
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false, Inherited = true)]
+    public class CheckSessionTimeOutAttribute : ActionFilterAttribute
+    {
+        public override void OnActionExecuting(System.Web.Mvc.ActionExecutingContext filterContext)
+        {
+            HttpSessionStateBase session = filterContext.HttpContext.Session;
+            Controller controller = filterContext.Controller as Controller;
+
+            if (controller != null)
+            {
+                if (session["ID_Agent"] == null || session["ID_Agent"] == "" || session["ID_Agent"] == "0"
+                    || session["ID_Company"] == null || session["ID_Company"] == "" || session["ID_Company"] == "0")
+                {
+                    filterContext.Result =
+                           new RedirectToRouteResult(
+                               new RouteValueDictionary{{ "controller", "Home" },
+                                          { "action", "AgentLogin" }
+
+                                         });
+                }
+            }
+
+            base.OnActionExecuting(filterContext);
+        }
+    }
+}

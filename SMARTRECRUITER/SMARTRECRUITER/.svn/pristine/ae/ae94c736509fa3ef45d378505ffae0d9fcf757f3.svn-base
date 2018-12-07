@@ -1,0 +1,119 @@
+﻿@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/Settings.js"></script>
+<script src="~/js/Custom.js"></script>
+
+
+
+<script>
+
+    var api_url = '@ViewBag.api_url'
+
+
+    $(document).ready(function () {
+        ObjSettings.init();
+    });
+</script>
+<section class="content-header">
+    <h1>Settings
+            <small>Settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="~/Agent/AgentDashboard"><i class="fa fa-home"></i>Home</a></li>
+        <li class="active"><a href="~/Settings/Settings">Settings</a></li>
+    </ol>
+</section>
+<div class="row">
+    <div class="col-md-12">
+        <!-- /.box-header -->
+        <div class="box-body">
+            <div class="box-group" id="accordion">
+                <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+                <div class="panel box box-primary">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Ticket Number Generation
+                      </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="panel-collapse collapse in">
+                        <div class="box-body">
+                            <div class="box-header">
+                                <div class="form-horizontal">
+                                    <div class="box-body">
+                                        <div class="col-md-9">
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Ticket No</label>
+                                                <div class="col-sm-6">
+                                                    <input type="checkbox"  class="icheck" id="chkAuto" /><span style="font-weight: bold; padding-left: 5px;">Auto Generate</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="col-sm-2 control-label">Prefix</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" class="form-control" id="txtPrefix" maxlength="3" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box-footer">
+                                <div class="row">
+                                    <div class="btn-group pull-right">
+                                        <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="ObjSettings.Submit();">Submit</button>
+
+                                        &nbsp;&nbsp
+                           <button type="reset" id="btnClear" class="btn btn-primary" onclick="ObjSettings.Clear();">Clear</button>
+
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+                <div class="panel box box-primary">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Settings 2
+                      </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="panel-collapse collapse">
+                        <div class="box-body">
+                            blank
+                   
+                        </div>
+                    </div>
+                </div>
+                <div class="panel box box-primary">
+                    <div class="box-header with-border">
+                        <h4 class="box-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Settings 3
+                      </a>
+                        </h4>
+                    </div>
+                    <div id="collapseThree" class="panel-collapse collapse">
+                        <div class="box-body">
+                            blank
+                   
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-body -->
+        <!-- /.box -->
+    </div>
+<!-- /.col -->
+
+<!-- /.col -->
+</div>

@@ -1,0 +1,209 @@
+﻿@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+        // Layout = null;
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/UserTickets.js"></script>
+<script src="~/js/Custom.js"></script>
+<script>
+    var api_url = '@ViewBag.api_url'
+    $(document).ready(function () {
+        try{
+            ObjUserTickets.init();
+        }
+        catch (ex)
+        { alert(ex); }
+    });
+</script>
+<section class="content-header">
+    <h1>User
+            <small>Tickets</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+
+<section class="content">
+    @* <div class="row">
+        <div class="col-xs-12">*@
+    <div id="ViewBranch">
+
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"></h3>
+                <div class="btn-group pull-left">
+                    <button id="btnAddNew" class="btn btn-primary" onclick="ObjUserTickets.Show(2)">
+                        Add New <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div id="Grid" class="box-body">
+            </div>
+        </div>
+
+    </div>
+    <div id="AddBranch" style="display: none;">
+        <div class="box">
+            <div class="box-header with-border">
+                <h3 class="box-title">Add Team</h3>
+                <div class="btn-group pull-right">
+                    <button id="btnBack" class="btn btn-primary" onclick="ObjUserTickets.init()">
+                        <i class="fa fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Ticket No<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="hidden" id="hfTicketsId" value="0" />
+                            <input type="hidden" id="hfUserId" value="0" />
+                            <input type="text" class="form-control" id="txtTicketNo" onchange="ObjUserTickets.Validate()" maxlength="25" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Date<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtDate" onchange="ObjUserTickets.Validate()" maxlength="50" disabled="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Product<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <select id="ddlProduct" class="form-control" onchange="ObjUserTickets.Validate()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Topic<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <select id="ddlTopic" class="form-control" onchange="ObjUserTickets.Validate()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Subject<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtSubject" onchange="ObjUserTickets.Validate()" maxlength="50" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Description<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtDescription" onchange="ObjUserTickets.Validate()" maxlength="3000" />
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="box-footer">
+                    <div class="btn-group pull-right">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="ObjUserTickets.Submit()">Submit</button>
+                        &nbsp;&nbsp
+                                <button type="reset" id="btnClear" class="btn btn-primary" onclick="ObjUserTickets.Clear()">Clear</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="divTicketDetails" style="display: none;">
+        <div class="box">
+            <div class="form-horizontal">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-tags"></i>Ticket No: 
+                <label id="lblUserTickNo"></label>
+                        <small class="pull-right">Date :
+                            <label id="lblUserDate">Date</label></small>
+                    </h2>
+                </div>
+                <div class="box-body">
+
+                    <div class="col-sm-4 invoice-col">
+                       Product : <b><label id="lblUserProduct"></label></b>
+                        <br>
+                        Topic : <b>
+                        <label id="lblUserTopic"></label></b>
+                        <br>
+                        Subject : <b><label id="lblUserSubject"></label></b>                        
+                        <br>
+                        Description : <b><label id="lblUserDescription"></label></b>
+                         <br>
+                    </div>
+
+                    <div class="col-sm-4 invoice-col">
+                        Status : <b><label id="lblUserStatus"></label>
+                        </b>
+                        <br>
+                        Email : <b><label id="lblUserEmail"></label></b>                     
+                        <br>
+                       
+                        
+                    </div>
+
+                    <div class="col-sm-4 invoice-col">                       
+                        Last MessageDate : <b><label id="lblUserLastMessageDate"></label></b>
+                        <br>
+                        Last ResponseDate : <b><label id="lblUserLastResponseDate"></label>
+                        </b>
+                        <br>
+                          Last CloseDate : <b><label id="lblUserLastCloseDate"></label></b> 
+                        <br>
+                        Last Closedby :
+                        <b><label id="lblUserClosedby">Topic</label><br></b>
+                        
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="divTimeLineTickets">
+            <div class="box">
+                <div class="box-header">
+                    <h3 class="box-title"></h3>
+                    <div class="btn-group pull-left">
+                        <a class="btn btn-primary">Ticket Threads </a>
+                    </div>
+                </div>
+                <div class="box-body">                  
+                        <div class="col-md-12">
+                            <ul class="timeline" id="UlBind">
+                            </ul>   
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description<span style="color: red">*</span></label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control" id="txtUserDescription" onchange="ObjUserTickets.Validate()" maxlength="3000" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="btn-group pull-right">
+                        <button id="btnSubmitDescription" type="submit" class="btn btn-primary" onclick="ObjUserTickets.SubmitDescription()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+</section>

@@ -1,0 +1,4 @@
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Master\bin\Debug\SupportTicket.Interface.Master.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Master\bin\Debug\SupportTicket.Interface.Master.pdb
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Master\obj\Debug\SupportTicket.Interface.Master.dll
+D:\WORKAREA\SupportTicket\SupportTicket\SupportTicket\Interfaces\SupportTicket.Interface.Master\obj\Debug\SupportTicket.Interface.Master.pdb

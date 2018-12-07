@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+
+namespace SupportTicket.Interface.Masters
+{
+    public interface IAgent:ICommon
+    {
+        string AgentCode { get; set; }
+        string AgentName { get; set; }
+        long FK_Department { get; set; }
+        long SortOrder { get; set; }
+    }
+}

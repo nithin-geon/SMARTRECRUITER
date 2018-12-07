@@ -1,0 +1,9 @@
+D:\Projects\Inventory\Inventory\Interface\Inventory.Interface\bin\Debug\Inventory.Interface.dll
+D:\Projects\Inventory\Inventory\Interface\Inventory.Interface\bin\Debug\Inventory.Interface.pdb
+D:\Projects\Inventory\Inventory\Interface\Inventory.Interface\obj\Debug\Inventory.Interface.dll
+D:\Projects\Inventory\Inventory\Interface\Inventory.Interface\obj\Debug\Inventory.Interface.pdb
+D:\WORKAREA\EasyShopPlus\Interface\Inventory.Interface\bin\Debug\Inventory.Interface.dll
+D:\WORKAREA\EasyShopPlus\Interface\Inventory.Interface\bin\Debug\Inventory.Interface.pdb
+D:\WORKAREA\EasyShopPlus\Interface\Inventory.Interface\obj\Debug\Inventory.Interface.dll
+D:\WORKAREA\EasyShopPlus\Interface\Inventory.Interface\obj\Debug\Inventory.Interface.pdb
+D:\WORKAREA\EasyShopPlus\Interface\Inventory.Interface\obj\Debug\Inventory.Interface.csprojResolveAssemblyReference.cache

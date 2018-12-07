@@ -1,0 +1,129 @@
+﻿
+
+var ObjUserLogin = new UserLogin();
+var isValidation = 0;
+function UserLogin() {
+
+
+    this.init = function () {
+
+        try {
+            this.Clear();
+            this.DrawCaptcha();
+          
+        }
+        catch (ex) {
+            alert(ex + 'Initialise Product')
+        }
+    };
+
+    this.Clear = function () {      
+       
+        $('#txtUserName').val("");
+        $("#txtUserName").removeClass("validateerror");
+        $('#txtPassword').val("");
+        $("#txtPassword").removeClass("validateerror");       
+        isValidation = 0;
+
+    };
+
+    this.Validate = function () {
+
+        if (isValidation == 1) {
+            var _Error = 0;
+            if ($('#txtUserName').val() == "") {
+                $('#txtUserName').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtUserName').removeClass("validateerror");
+            }
+            if ($('#txtPassword').val() == "") {
+                $('#txtPassword').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtPassword').removeClass("validateerror");
+            }
+            return _Error;
+        }
+
+    }
+    this.Submit = function () {
+
+        isValidation = 1;
+        if (this.Validate() <= 0) {
+
+            ObjUserLogin.UserLoginCheck();
+        }
+        else {
+
+            return false;
+        }
+    };
+
+    this.UserLoginCheck = function () {
+        try {
+         
+            var ObjBlUser = {               
+                UsUserName: $('#txtUserName').val(),
+                UsPassword: $('#txtPassword').val(),             
+
+            };
+
+            var DATA = JSON.stringify(ObjBlUser);         
+            $.ajax({
+                url: api_url + '/Home/UserLoginCheck',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                data: DATA,
+                dataType: 'json',
+                success: function (data) {
+                    try {
+                       // alert(JSON.stringify(data.Url));
+                        //var Mydata = JSON.stringify(data);                          
+                      //  window.location.href = data.Url;
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+
+                }
+                 ,
+
+                error: function (error) {
+                    alert(error + ' : UserLoginCheck');
+
+                }
+
+            });
+        }
+        catch (e) {
+            alert(e + '   : /Home/UserLoginCheck');
+        }
+
+
+
+
+    }
+
+
+
+    this.DrawCaptcha = function() {
+        function randString(x) {
+            var s = "";
+            while (s.length < x && x > 0) {
+                var r = Math.random();
+                s += (r < 0.1 ? Math.floor(r * 100) : String.fromCharCode(Math.floor(r * 27) + (r > 0.5 ? 97 : 65)));
+            }
+            return s;
+        }
+
+        document.getElementById("txtCaptcha").value = randString(6);
+    }
+
+
+
+
+}

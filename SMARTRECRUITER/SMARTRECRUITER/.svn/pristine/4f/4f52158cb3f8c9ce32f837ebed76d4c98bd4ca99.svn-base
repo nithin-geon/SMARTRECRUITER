@@ -1,0 +1,141 @@
+﻿@{
+    Layout = null;
+}
+    
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+    	<meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+         <script src="~/Login/js/jquery-2.1.1.js"></script>
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+        
+        
+        <link rel="stylesheet" href="~/Login/css/font-awesome.min.css">
+	<link rel="stylesheet" href="~/Login/css/style.css">
+    
+    <link href="~/Login/css/style5.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="/SupportTickets/Login/css/agentstyle.css" rel="stylesheet" type="text/css" media="all">
+        <link rel="stylesheet" href="~/Login/css/font-awesome.css">
+        <link rel="stylesheet" href="~/Login/css/animate.css">
+      <link rel="stylesheet" href="~/Login/css/templatemo_misc.css">
+        <link href="~/css/Style.css" rel="stylesheet" />
+    <script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+    <script src="~/js/ng-cap.js"></script>
+        <script src="~/js/AgentLogin.js"></script>
+    <script>
+
+        var api_url = '@ViewBag.api_url'
+
+        $(document).ready(function () {
+
+            ObjAgentlogin.init();
+        });
+    </script>
+    </head>
+    <body style="background-image:url('../../Login/Images/pattern.jpg')" >
+       
+
+
+        <div class="site-main" id="sTop">
+            <div class="site-header">
+            
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12 text-center"></div> 
+                        <!-- /.col-md-12 -->
+                    </div> <!-- /.row -->
+                </div> <!-- /.container -->
+                <div class="main-header">
+                     <!-- /.container -->
+                </div> <!-- /.main-header -->
+            </div> <!-- /.site-header -->
+            <div class="site-slider">
+                <div class="slider">
+                  
+                
+                    <div class="flexslider">
+                    
+                        <ul class="slides">
+                            <li>
+                                <div class="overlay"></div>
+                                <img src="~/Login/images/slide1.jpg" alt="">
+                                <div class="slider-caption visible-md visible-lg">
+                                    <h2 style="font-size:80px;"></h2>
+                                    
+                                    
+                                   
+                              </div>
+                            </li>
+                            <li>
+                                <div class="overlay"></div>
+                                <img src="~/Login/images/slide2.jpg" alt="">
+                                <div class="slider-caption visible-md visible-lg">
+                                    <h2 style="font-size:80px;"></h2>
+                                    
+                                    
+                                    
+                              </div>
+                            </li>
+                            <li>
+                                <div class="overlay"></div>
+                                <img src="~/Login/images/slide3.jpg" alt="">
+                                <div class="slider-caption visible-md visible-lg">
+                                    
+
+</p>
+                                 
+                                </div>
+                            </li>
+                      </ul>
+    <!-- main -->
+    <div class="main" style="margin-bottom: 50px;margin-bottom: 50px;/*border: solid 4px violet;*/ height: 360px;margin-top: 20px;">
+        <h1>Agent Login</h1>
+        <input id="txtUserName" type="text" value="User Name" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'User Name';}" required>
+        <input id="txtPassword" type="password" value="Password" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'Password';}" required>
+        <div ng-app="myApp" ng-controller="myCtrl">
+            <div class="re_btnag4">
+                <input type="text" id="txtCaptcha" class="captchabox" disabled />
+            </div>
+            <div class="re_btnag1">
+                <button type="button" id="btnrefresh" class="refreh_btnag" ng-click="captchain = null" onclick="ObjAgentlogin.DrawCaptcha();" style="height:71%;">
+                    <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>
+                </button>
+            </div>
+            <div class="re_btnag3">
+                <input type="text" class="margin" ng-model="captchain" style="margin: 0px; font-size: 1.5em; width: 115%; border: solid 1px red;"><br>
+            </div>
+            <input id="btnSubmit" type="submit" value="Login" ng-disabled="capvalid!=true" class="btn btn-primary btn-block btn-flat pull-right margin" onclick="ObjAgentlogin.Submit()">
+        </div>
+        @*<input type="submit" value="Login" onclick="ObjAgentlogin.Submit();">*@
+    </div>
+    <!-- //main -->
+</div> <!-- /.flexslider -->
+              </div> <!-- /.slider -->
+            </div> <!-- /.site-slider -->
+        </div> <!-- /.site-slider -->
+        </div> <!-- /.site-main -->
+
+
+         <!-- /#services -->
+
+
+
+         <!-- /#portfolio --><!-- /#our-team --><script src="~/Login/js/vendor/jquery-1.11.0.min.js"></script>
+            
+         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.0.min.js"><\/script>')</script>
+         
+        
+        <script src="~/Login/js/plugins.js"></script>
+        <script src="~/Login/js/main.js"></script>
+
+        <script src="~/Login/js/vendor/jquery.gmap3.min.js"></script>
+        
+        
+    </body>
+</html>

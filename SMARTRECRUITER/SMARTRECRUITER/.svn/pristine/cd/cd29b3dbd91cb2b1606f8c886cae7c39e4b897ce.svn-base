@@ -1,0 +1,7 @@
+﻿
+var ObjAgent = new Agent();
+var isValidation = 0;
+function Agent() {
+
+
+}

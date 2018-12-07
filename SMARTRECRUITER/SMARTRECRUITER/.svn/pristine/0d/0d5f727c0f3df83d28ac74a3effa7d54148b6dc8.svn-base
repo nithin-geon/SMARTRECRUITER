@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/Settings.js"></script>
+<script src="~/js/Custom.js"></script>
+
+
+
+<script>
+
+    var api_url = '@ViewBag.api_url'
+
+
+    $(document).ready(function () {
+        ObjSettings.init();
+    });
+</script>
+<section class="content-header">
+    <h1>Settings
+            <small>Settings</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+            <div id="AddSettings">
+
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title"></h3>
+                        <div class="btn-group pull-left">
+                            <span class="bg-green">Ticket Number Generation</span>
+                        </div>
+                        <div class="form-horizontal">
+                            <div class="box-body">
+                                <div class="col-md-9">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Auto Generate</label>
+                                        <div class="col-sm-6">
+                                            <input type="checkbox" class="icheck" id="chkAuto" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Prefix</label>
+                                        <div class="col-sm-6">
+                                            <input type="text" class="form-control" id="txtPrefix" maxlength="3" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box-footer">
+                        <div class="btn-group pull-right">
+                            <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="ObjSettings.Submit();">Submit</button>
+
+                            &nbsp;&nbsp
+                           <button type="reset" id="btnClear" class="btn btn-primary" onclick="ObjSettings.Clear();">Clear</button>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- /.row -->
+
+
+</section>

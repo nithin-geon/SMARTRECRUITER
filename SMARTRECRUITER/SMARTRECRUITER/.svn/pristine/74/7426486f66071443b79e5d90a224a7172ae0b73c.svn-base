@@ -1,0 +1,31 @@
+﻿
+
+function Error(ErrorCode, Field, FocusControl) {  
+        switch (ErrorCode) {
+            case "-1":
+                alert(" - Transaction Failed...!");
+                $(FocusControl).focus();
+                break;
+            case "-2":
+                alert(Field + "Already Exists., Please Verify");
+                $(FocusControl).focus();
+                break;
+            case "-11":
+                alert(Field + "Can not Insert, Authorization is pending, Please Verify");
+                $(FocusControl).focus();
+                break;
+            case "-12":
+                alert(Field + "Can not Update, Authorization is pending, Please Verify");
+                $(FocusControl).focus();
+                break;
+            case "-13":
+                alert(Field + "Can not Delete, Authorization is pending, Please Verify");
+                $(FocusControl).focus();
+                break;
+            case "-14":
+                alert(Field + "You dont have the permission");
+                $(FocusControl).focus();
+                break;              
+        }
+};
+

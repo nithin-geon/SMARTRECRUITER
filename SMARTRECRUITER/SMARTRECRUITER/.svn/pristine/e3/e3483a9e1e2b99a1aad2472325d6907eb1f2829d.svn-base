@@ -1,0 +1,125 @@
+﻿
+
+var ObjAgentlogin = new Agentlogin();
+var isValidation = 0;
+function Agentlogin() {
+
+
+    this.init = function () {
+
+        try {
+           
+            this.Clear();
+          
+        }
+        catch (ex) {
+            alert(ex + 'Initialise Product')
+        }
+    };
+
+    this.Clear = function () {      
+       
+        $('#txtUserName').val("");
+        $("#txtUserName").removeClass("validateerror");
+        $('#txtPassword').val("");
+        $("#txtPassword").removeClass("validateerror");       
+        isValidation = 0;
+
+    };
+
+    this.Validate = function () {
+
+        if (isValidation == 1) {
+            var _Error = 0;
+            if ($('#txtUserName').val() == "") {
+                $('#txtUserName').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtUserName').removeClass("validateerror");
+            }
+            if ($('#txtPassword').val() == "") {
+                $('#txtPassword').addClass("validateerror");
+                _Error++;
+            }
+            else {
+                $('#txtPassword').removeClass("validateerror");
+            }
+            return _Error;
+        }
+
+    }
+    this.Submit = function () {
+
+        isValidation = 1;
+        if (this.Validate() <= 0) {
+
+            ObjAgentlogin.AgentloginCheck();
+        }
+        else {
+
+            return false;
+        }
+    };
+
+    this.AgentloginCheck = function () {
+        try {
+         
+            var ObjBlAgent = {               
+                AgUserName: $('#txtUserName').val(),
+                AgPassword: $('#txtPassword').val(),             
+
+            };
+
+            var DATA = JSON.stringify(ObjBlAgent);
+            alert(DATA);
+            $.ajax({
+                url: api_url + '/Home/AgentloginCheck',
+                cache: false,
+                type: 'POST',
+                contentType: 'application/json;charset=utf-8',
+                data: DATA,
+                dataType: 'json',
+                success: function (data) {
+                    try {
+                        window.location.href = data.Url;
+
+                        //if (data.statusCode == -2) {
+                        //    alert("Duplicate Entry");
+                        //    $('#txtProductCode').focus();
+                        //}
+                        //else if (data.statusCode == -1) {
+                        //    alert("Failed");
+                        //}
+                        //else if (data.statusCode > 0) {
+                        //    alert("Successfull");
+                        //    ObjAgentlogin.init();
+                        //}
+                        //else {
+                        //    alert("Try After Some time");
+                        //}
+                    }
+                    catch (ex) {
+                        alert(ex + 'return issue');
+                    }
+
+                }
+                 ,
+
+                error: function (error) {
+                    alert(error + ' : AgentloginCheck');
+
+                }
+
+            });
+        }
+        catch (e) {
+            alert(e + '   : /Home/AgentloginCheck');
+        }
+
+
+
+
+    }
+
+}

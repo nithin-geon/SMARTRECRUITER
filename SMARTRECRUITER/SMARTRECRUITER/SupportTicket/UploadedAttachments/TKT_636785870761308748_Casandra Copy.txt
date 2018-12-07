@@ -1,0 +1,20 @@
+COPY radiushistory.rawaccountinglogs (msisdn 
+	acct_session_id,acct_input_octets ,
+	acct_output_octets,	acct_session_time ,
+	acct_start_time ,acct_stop_time ,acct_terminate_cause ,
+	apn ,charging_id ,device_ip,ggsn,imei ,imsi ,
+	mcc_mnc,nas_ip_address,rat_type,reportingip,
+	sgsn,timestamp,user_name ) 
+TO '../rawaccountinglogs.csv' WITH HEADER = TRUE ;
+
+
+
+
+COPY test_radiushistory.rawaccountinglogs (msisdn 
+	acct_session_id,acct_input_octets ,
+	acct_output_octets,	acct_session_time ,
+	acct_start_time ,acct_stop_time ,acct_terminate_cause ,
+	apn ,charging_id ,device_ip,ggsn,imei ,imsi ,
+	mcc_mnc,nas_ip_address,rat_type,reportingip,
+	sgsn,timestamp,user_name )  FROM
+ '../rawaccountinglogs.csv' WITH HEADER = TRUE ;

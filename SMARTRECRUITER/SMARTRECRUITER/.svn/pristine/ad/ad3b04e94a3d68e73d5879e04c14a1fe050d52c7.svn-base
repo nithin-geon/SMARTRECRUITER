@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "UserProfile";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/UserProfile.js"></script>
+<script src="~/js/Custom.js"></script>
+
+<script>
+
+    var api_url = '@ViewBag.api_url'
+
+
+    $(document).ready(function () {
+        ObjUserProfile.init();
+    });
+</script>
+
+<section class="content-header">
+    <h1>User Profile
+            <small>Masters</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i>Home</a></li>
+        <li class="active">Dashboard</li>
+    </ol>
+</section>
+
+<!-- Main content -->
+<section class="content">
+    <!-- Small boxes (Stat box) -->
+    <div class="row">
+        <div class="col-xs-12">
+     
+            <div id="AddBranch">
+                <div class="box">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Profile View</h3>
+                        <div class="btn-group pull-right">
+                          <a href="~/Userdashboard/UserDashboard" >  <button id="btnBack" class="btn btn-primary" onclick="">
+                                <i class="fa fa-arrow-up"></i>
+                            </button></a>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
+                    <div class="form-horizontal">
+                        <div class="box-body">
+                            <div class="col-sm-8">
+                           
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">User Code<span style="color: red"></span></label>
+                                <div class="col-sm-9">
+                                    <input type="hidden" id="UsprofileId" value="0" />
+                                    <input type="text" class="form-control" id="UsprofileCode"  >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">User Name<span style="color: red"></span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="UsprofileName"  >
+                                </div>
+                            </div>
+
+                                 <div class="form-group">
+                                <label class="col-sm-3 control-label">User Mobile<span style="color: red"></span></label>
+                                <div class="col-sm-9">                                  
+                                    <input type="text" class="form-control" id="UsMobile" >
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">User Email<span style="color: red"></span></label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="UsEmail" >
+                                </div>
+                            </div>
+
+                       </div>
+
+                             <div class="col-sm-4">
+                            <img id="pixelpro" src="" class="user-image probord" alt="User Image">
+                        </div>
+                        </div>
+                       
+                        <!-- /.box-body -->
+                        <div class="box-footer">
+                            <div class="btn-group pull-right">
+                                <a href="~/UserDashboard/UserDashboard" >
+                                <button id="btnSubmit"    class="btn btn-primary" onclick="">Close</button></a>
+                     
+                            </div>
+                        </div>
+                        <!-- /.box-footer -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+
+</section>

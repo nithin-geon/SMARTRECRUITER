@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+        <title>: Support Tickets ::</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+        
+        
+    
+      
+       <link rel="stylesheet" type="text/css" href="Login/css/demo.css" />
+        <link rel="stylesheet" type="text/css" href="Login/css/style1.css" />
+        <link href="css/style.css" rel="stylesheet" type="text/css" media="all" />
+        
+        <!--<link href="Login/css/demo3.css" rel="stylesheet" type="text/css" media="all" />
+		<script type="text/javascript" src="Login/js/modernizr.custom.86080.js"></script>-->
+    </head>
+    
+    <body  style="background-color:#FFF">
+    
+        
+    <div class="container">
+        
+            <!-- Codrops top bar -->
+      <div class="codrops-top">
+                <span class="right">
+                   <!-- <a href="#">Home:</a>
+                    <a href="#" target="_blank">Home:</a>-->
+                    <a href="Home/AgentLogin">
+                        <strong>Agent Login</strong>
+                    <a href="Home/UserLogin">
+                        <strong>UserLogin</strong>
+                    </a>
+                </span>
+                <div class="clr"></div>
+            </div><!--/ Codrops top bar -->
+            
+        </div>
+    <div class="codrops-top3" style="width:90%; background:url(images/1.jpg) margin-top:24px; margin:auto; padding:0px; background: #FFF; padding-left: border:solid 1px #666666;">
+    
+      <h1 style="font-size:27px; color:#666;font-weight:bold;text-decoration:underline; "><br>OUR Products</h1><br>
+        <span style="font-size:12px; color:#333; text-align:justify;margin-left:45px;font-style:italic;"> We had also developed a wide range of products for the entire Co-operative sector including Housing Co-operative societies. Perfect is offer a predictable web 
+            application development experience. We work without sacrificing inspiration or creativity. Potential customers who are already searching for your 
+            Banking services can find your business through search engines and your website.Inventory Solutions supply of POS Hardware peripherals along with the POS Software helps the implementation much easier and fers total solution from one reliable team.
+            Mscore, Ease to use Mobile Passbook App for your Android Smartphone, You can access your bank statement from anywhere in the world.Sms Banking Know the Account balance and other details at any time.You can bank at your convenience even from your home.
+        </span><br /><br />
+        <h1 style="font-size:20px; color: #B2511C;font-weight:bold;">Banking </h1><br>
+      <h1 style="font-size:14px;font-style:italic;  color: #000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">SCORE – Browser Based Core Banking Software </h1><br>
+      <h1 style="font-size:14px; font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Mscore (Mobile Banking) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Perfect Core Bank </h1><br>
+      <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">ATM/CDM  </h1><br>
+      <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Information Kiosk </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Sms Banking (Push & Pull Services) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">BC (Business Correspondent) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Score NBFC  </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Tele Banking (IVRS)   </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">NETBANKING  </h1><br>
+        <h1 style="font-size:20px; color: #B2511C;font-weight:bold;">OTHER SOLUTIONS </h1><br>
+      <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">EasyShop (Retail Management System) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">EasyShop Plus </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Perfect Blinds </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Easy Share (Document Management System) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">ERP Solutions (Retail Solutions) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Empower(Hr & Payroll) </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Support Tickets </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Hospital Management System </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Pharmacy Management System </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Laboratory Management System </h1><br>
+        <h1 style="font-size:20px; color: #B2511C;font-weight:bold;">UI/UX DESIGN </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Web Designing </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Internet Marketing </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">Web Development </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">E-commerce </h1><br>
+        <h1 style="font-size:14px;font-style:italic;  color:#000;background:url(images/bu.jpg) no-repeat; list-style:none;padding-left:19px;">SEO </h1><br>
+ <div class="clr"></div>
+    </div>
+    </body>
+    
+        
+</html>

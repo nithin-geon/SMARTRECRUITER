@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+        // Layout = null;
+}
+
+<script src="~/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="~/js/Masters/UserTickets.js"></script>
+<script src="~/js/Custom.js"></script>
+
+
+
+
+
+<script>
+    var api_url = '@ViewBag.api_url'
+    var createlink = '@ViewBag.createlink'
+    var pageStatus = @ViewData["Status"]
+    $(document).ready(function () {
+
+
+        try {
+            ObjUserTickets.init(createlink);
+            ObjUserTickets.AutoGenTktNo();
+        }
+        catch (ex)
+        { alert(ex); }
+
+    });
+
+</script>
+
+<style type="text/css">
+    #selectedFiles img {
+        max-width: 200px;
+        max-height: 200px;
+        float: left;
+        margin-bottom: 10px;
+    }
+
+    input[type='file'] {
+        color: transparent;
+    }
+</style>
+<script>
+    var nowTemp = new Date();
+    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+    var files;
+    var storedFiles = [];
+    var upc = 0;
+
+
+    $(function () {
+
+        $(":file").attr('title', '  ');
+        var $loading = $('#loadingDiv').hide();
+
+        $("input[id^='fileToUpload']").change(function (e) {
+            doReCreate(e);
+        });
+
+        selDiv = $("#selectedFiles");
+    });
+
+    $(function () {
+
+        $(":file").attr('title', '  ');
+        var $loading = $('#loadingDiv').hide();
+
+        $("input[id^='fileMultiUpload']").change(function (e) {
+            doReCreateAdd(e);
+        });
+
+        selDiv = $("#selectedFilesAdd");
+    });
+
+    function doReCreateAdd(e) {
+        upc = upc + 1;
+        handleFileSelectAdd(e);
+    }
+
+    function handleFileSelectAdd(e) {
+        selDiv = document.querySelector("#selectedFilesAdd");
+
+        if (!e.target.files) return;
+        files = e.target.files;
+
+        for (var i = 0; i < files.length; i++) {
+            var f = files[i];
+            selDiv.innerHTML += "<div id=" + i + ">" + f.name + "</div>";
+            storedFiles.push(f.name);
+        }
+    }
+
+    function doReCreate(e) {
+        upc = upc + 1;
+        handleFileSelect(e);
+    }
+
+    function handleFileSelect(e) {
+        selDiv = document.querySelector("#selectedFiles");
+
+        if (!e.target.files) return;
+        files = e.target.files;
+
+        for (var i = 0; i < files.length; i++) {
+            var f = files[i];
+            selDiv.innerHTML += "<div id=" + i + ">" + f.name + "</div>";
+            storedFiles.push(f.name);
+        }
+    }
+</script>
+
+<section class="content-header">
+    <h1>User
+            <small>Tickets</small>
+    </h1>
+    <ol class="breadcrumb">
+
+
+        <li><a href="~/UserDashboard/UserDashboard"><i class="fa fa-home"></i>Home</a></li>
+        <li><a href="~/UserTickets/UserTickets?Status=0">Tickets</a></li>
+
+    </ol>
+</section>
+
+<section class="content">
+    <div id="ViewBranch">
+       
+        <div class="box">
+            <div class="box-header">
+                <h3 class="box-title"></h3>
+                <div class="btn-group pull-left">
+                    <button id="btnAddNew" class="btn btn-primary" onclick="ObjUserTickets.Show(2)">
+                        Add New <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+                <div class="btn-group pull-right">
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input name="table_search" class="form-control pull-right" id="txtSearch" placeholder="Search" type="text">
+
+                            <div class="input-group-btn">
+                                <button type="submit" id="btnSearch" onclick="ObjUserTickets.FillGrid();" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="Grid" class="box-body">
+            </div>
+        </div>
+
+    </div>
+    <div id="AddBranch" style="display: none;">
+        <div class="box">
+
+            <div class="box-header with-border">
+                <h3 class="box-title">Add Tickets</h3>
+                <div class="btn-group pull-right">
+                    <button id="btnBack" class="btn btn-primary" onclick="ObjUserTickets.init()">
+                        <i class="fa fa-arrow-up"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Ticket No<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="hidden" id="hfTicketsId" value="0" />
+                            <input type="hidden" id="hfUserId" value="0" />
+                            <input type="text" class="form-control" id="txtTicketNo" onchange="ObjUserTickets.Validate()" maxlength="25" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Date<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtDate" onchange="ObjUserTickets.Validate()" maxlength="50" disabled="" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Product<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <select id="ddlProduct" class="form-control" onchange="ObjUserTickets.Validate()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Topic<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <select id="ddlTopic" class="form-control" onchange="ObjUserTickets.Validate()">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Subject<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <input type="text" class="form-control" id="txtSubject" onchange="ObjUserTickets.Validate()" maxlength="50" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Description<span style="color: red">*</span></label>
+                        <div class="col-sm-6">
+                            <textarea class="form-control" rows="3" id="txtDescription" onchange="ObjUserTickets.Validate()" maxlength="3000" placeholder="Enter ..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">Attachments</label>
+                                <div class="col-sm-6">
+                                    <div id="uploadersAdd">
+                                        @*<input type="file" id="fileToUpload" name="fileUpload" multiple="multiple" onchange="ObjUserTickets.UploadAttachments();"/>*@
+                                        <input id="fileMultiUpload" type="file" multiple="multiple" onchange="ObjUserTickets.UploadMultiAttachments();">
+                                        <button id="btnRemoveMulti" type="button" class="btn btn-primary" onclick="ObjUserTickets.RemoveMulti();" style="display: none;">Remove</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label"></label>
+                                <div class="col-sm-6">
+                                    <div id="selectedFilesAdd"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="box-footer">
+                    <div class="btn-group pull-right">
+                        <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="ObjUserTickets.Submit()">Submit</button>
+                        &nbsp;&nbsp
+                                <button type="reset" id="btnClear" class="btn btn-primary" onclick="ObjUserTickets.Clear()">Clear</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div id="divTicketDetails" style="display: none;">
+        <div class="box">
+            <div class="form-horizontal">
+                <div class="col-xs-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-tags"></i>Ticket No : 
+                <label id="lblUserTickNo"></label>
+                        <small class="pull-right">Date :
+                            <label id="lblUserDate"></label>
+                        </small>
+                    </h2>
+                </div>
+                <div class="box-body">
+                    <div class="col-sm-4 invoice-col">
+                        Topic: <b>
+                            <label id="lblUserTopic"></label>
+                        </b>
+                        <br>
+                        Product: <b>
+                            <label id="lblUserProduct"></label>
+                        </b>
+                        <br>
+                        Client: <b>
+                            <label id="lblUserClient"></label>
+                        </b>
+                    </div>
+                    <div class="col-sm-4 invoice-col">
+                        Status: <b>
+                            <label id="lblUserStatus"></label>
+                        </b>
+                        <br>
+                        Email: <b>
+                            <label id="lblUserEmail"></label>
+                        </b>
+                        <br>
+                    </div>
+                    <div class="col-sm-4 invoice-col">
+                        Last MessageDate: <b>
+                            <label id="lblUserLastMessageDate"></label>
+                        </b>
+                        <br>
+                        Last ResponseDate: <b>
+                            <label id="lblUserLastResponseDate"></label>
+                        </b>
+                        <br>
+                        Last CloseDate: <b>
+                            <label id="lblUserLastCloseDate"></label>
+                        </b>
+                        <br>
+                        Last Closedby:
+                        <b>
+                            <label id="lblUserClosedby">Topic</label><br>
+                        </b>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="divTimeLineTickets" style="display:none;">
+             <div id="divLoading" style="margin: 0px; padding: 0px; position: fixed; right: 0px; top: 0px; width: 100%; height: 100%; background-color: #666666; z-index: 30001; opacity: .8; filter: alpha(opacity=70); display: none">
+            <p style="position: absolute; top: 30%; left: 45%; color: White;">
+                Loading, please wait...<img src="~/Images/ProgressSmall.gif" />
+            </p>
+        </div>
+            <div class="box">
+                <div class="box-header">
+                    <h2 class="page-header">
+                        <i class="fa fa-star"></i>
+                        <label id="lblUserSubject"></label>
+                    </h2>
+                </div>
+                <div class="box-body">
+                    <div class="col-md-12">
+                        <ul class="timeline" id="UlBind">
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Description<span style="color: red">*</span></label>
+                            <div class="col-sm-6">
+                                <textarea class="form-control" rows="3" id="txtUserDescription" onchange="ObjUserTickets.ValidateDescription()" maxlength="3000" placeholder="Enter ..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">Attachments</label>
+                            <div class="col-sm-6">
+                                <div id="uploaders">
+                                    @*<input type="file" id="fileToUpload" name="fileUpload" multiple="multiple" onchange="ObjUserTickets.UploadAttachments();"/>*@
+                                    <input id="fileToUpload" type="file" multiple="multiple" onchange="ObjUserTickets.UploadAttachments();">
+                                    <button id="btnRemove" type="button" class="btn btn-primary" onclick="ObjUserTickets.Remove();" style="display: none;">Remove</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label"></label>
+                            <div class="col-sm-6">
+                                <div id="selectedFiles"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="box-footer">
+                    <div class="btn-group pull-right">
+                        <button id="btnSubmitDescription" type="submit" class="btn btn-primary" onclick="ObjUserTickets.SubmitDescription()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="scrollbottomdiv"></div>
+    <a href="javascript:void(0);" id="scroll" title="Scroll to Top" style="display: none;">Top<span></span></a>
+</section>
+

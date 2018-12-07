@@ -1,0 +1,86 @@
+﻿
+var ObjMenu = new Menu();
+var isValidation = 0;
+function Menu() {
+
+    this.init = function () {
+        try {           
+            this.CallMenu();
+          //  this.GetPostreplayCount();
+        }
+        catch (ex) {
+            alert(ex + 'Initialize Menu')
+        }
+    };
+
+
+    this.CallMenu = function () {
+        try {
+            $.ajax({
+                url: api_url + '/Partial/FillMenu',
+                cache: false,
+                type: "GET",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+                    
+                    $('#divFillMenu').html(data.statusCode);
+                    $('#spanAgNameRight').html(data.statusCodeAgent);
+                    $('#strongAgNameRight').html(data.statusCodeAgent);
+                    $('#strongAgNameLeft').html(data.statusCodeAgent);
+                    var Mydata = JSON.parse(data.table);
+                    
+                    if (Mydata.length > 0) {
+                       $.each(Mydata, function (key, value) {                                             
+                           var namendep = Mydata[0].DepCode;
+                           $('#dep').html(namendep);
+                           var affiliateCode = Mydata[0].FullImage;
+
+                           $('#pixel').attr('src', $('#pixel').attr('src') + affiliateCode);
+                           $('#pixel1').attr('src', $('#pixel1').attr('src') + affiliateCode);
+                           $('#pixel2').attr('src', $('#pixel2').attr('src') + affiliateCode);
+
+                        
+                                });
+
+                    }
+                   
+                },
+                error: function (MenuHtml) {
+                    alert(MenuHtml.d + ': CallMenu');
+                    //alert('webservice_error');
+                }
+            });
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+
+
+    this.GetPostreplayCount = function (api_url) {
+        try {         
+            $.ajax({
+                url: api_url + '/Partial/PostreplayCount',
+                cache: false,
+                type: "GET",
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {                                                                           
+                    var Mydata = JSON.parse(data);                   
+                    if (Mydata[0].ReplayCount > 0) {
+                        $('#SpnUserTickCount').html(Mydata[0].ReplayCount);
+                    }
+                },
+                error: function (MenuHtml) {
+                    alert(MenuHtml.d + ': Error GetPostreplayCount');
+                    //alert('webservice_error');
+                }
+            }); 
+        }
+        catch (ex) {
+            alert(ex);
+        }
+    }
+
+}

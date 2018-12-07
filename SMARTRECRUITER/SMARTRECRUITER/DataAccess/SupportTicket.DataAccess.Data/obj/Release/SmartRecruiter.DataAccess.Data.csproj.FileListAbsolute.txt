@@ -1,0 +1,12 @@
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\bin\Release\Microsoft.Practices.EnterpriseLibrary.Data.dll
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\bin\Release\Microsoft.Practices.EnterpriseLibrary.Data.pdb
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\SmartRecruiter.DataAccess.Data.csprojAssemblyReference.cache
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.Configuration.DesignResources.resources
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.Configuration.Manageability.Properties.Resources.resources
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.Oracle.Configuration.DesignResources.resources
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.Properties.Resources.resources
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\SmartRecruiter.DataAccess.Data.csproj.GenerateResource.cache
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\SmartRecruiter.DataAccess.Data.csproj.CoreCompileInputs.cache
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\SmartRecruiter.DataAccess.Data.csproj.CopyComplete
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.dll
+E:\SMART\SMARTRECRUITER\SMARTRECRUITER\SMARTRECRUITER\DataAccess\SupportTicket.DataAccess.Data\obj\Release\Microsoft.Practices.EnterpriseLibrary.Data.pdb

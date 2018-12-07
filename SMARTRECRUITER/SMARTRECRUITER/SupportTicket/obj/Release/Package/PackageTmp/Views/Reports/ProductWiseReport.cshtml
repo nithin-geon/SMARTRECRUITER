@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "ProductWiseReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<script src="~/Plugins/jQuery/jquery-2.2.3.min.js"></script>
+<script src="~/js/Masters/Report.js"></script>
+<script src="~/js/Custom.js"></script>
+<script src="~/js/Masters/Tickets.js"></script>
+<script src="~/Plugins/select2/select2.full.min.js"></script>
+
+<script>
+
+    var api_url = '@ViewBag.api_url'
+
+    $(document).ready(function () {
+        objReport.init();
+        $(".select2").select2();
+    });
+</script>
+
+<section class="content-header">
+    <h1>Reports 
+            <small>Productwise</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-home"></i>Home</a></li>
+    </ol>
+</section>
+
+
+
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
+            <h3 class="box-title"></h3>
+            <div class="btn-group pull-right">
+                @*<button id="btnBack" class="btn btn-primary" onclick="ObjReport.init()">
+                    <i class="fa fa-arrow-up"></i>
+                </button>*@
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <!-- form start -->
+        <div class="form-horizontal">
+            <div class="box-body">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">From Date<span style="color: red">*</span></label>
+                    <div class="col-sm-6">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="datepickerfrom" onchange="objReport.CompareDate();objReport.Validate();">
+                        </div>
+                    </div>
+                    <!-- /.input group -->
+                </div>
+
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">To Date<span style="color: red">*</span></label>
+                    <div class="col-sm-6">
+                        <div class="input-group date">
+                            <div class="input-group-addon">
+                                <i class="fa fa-calendar"></i>
+                            </div>
+                            <input type="text" class="form-control pull-right" id="datepickerto" onchange="objReport.CompareDate();objReport.Validate();">
+                        </div>
+                    </div>
+                    <!-- /.input group -->
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">Product</label>
+                    <div class="col-sm-6">
+                        <select id="ddlProductOnly" class="form-control select2" style="width: 100%">
+                            <option value="0">All</option>
+                        </select>
+                    </div>
+                </div>
+
+                @*<div class="form-group">
+                    <label class="col-sm-2 control-label">Agent</label>
+                    <div class="col-sm-6">
+                        <select id="ddlAgent" class="form-control">
+                        </select>
+                    </div>
+                </div>*@
+            </div>
+            <!-- /.box-body -->
+            <div class="box-footer">
+                <div class="btn-group pull-right">
+                    <button id="btnSubmit" type="submit" class="btn btn-primary" onclick="objReport.SearchProductTicket();">Search</button>
+
+                    &nbsp;&nbsp
+                           <button type="reset" id="btnClear" class="btn btn-primary" onclick="objReport.Clear();">Clear</button>
+
+                </div>
+
+
+            </div>
+            <!-- /.box-footer -->
+        </div>
+    </div>
+    <div class="box" id="divView" style="display: none;">
+        <div class="box-header">
+            <h3 class="box-title"></h3>
+            <div class="btn-group pull-right">
+                <div class="box-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input name="table_search" class="form-control pull-right" id="txtSearch" placeholder="Search" type="text">
+
+                        <div class="input-group-btn">
+                            <button type="submit" id="btnSearch" onclick="objReport.SearchProductWiseTicket();" class="btn btn-default"><i class="fa fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.box-header -->
+        <div id="Grid">
+        </div>
+    </div>
+</section>
+<script src="~/Plugins/datepicker/bootstrap-datepicker.js"></script>
+<link href="~/Plugins/datepicker/datepicker3.css" rel="stylesheet" />
+<link href="~/Plugins/daterangepicker/daterangepicker.css" rel="stylesheet" />
+<script src="~/Plugins/daterangepicker/daterangepicker.js"></script>
+<script>
+
+    //$(function () {
+    //    $("#datepickerfrom").datepicker({
+    //        dateFormat: 'dd/mm/yyyy',
+    //        changeMonth: true,
+    //        yearRange: new Date().getFullYear().toString() + ':' + new Date().getFullYear().toString(),
+    //        onClose: function (selectedDate) {
+    //            alert(selectedDate);
+    //            $("#datepickerto").datepicker("option", "minDate", selectedDate);
+    //        }
+    //    });
+    //    $("#datepickerto").datepicker({
+    //        dateFormat: 'dd/mm/yyyy',
+    //        changeMonth: true,
+    //        yearRange: new Date().getFullYear().toString() + ':' + new Date().getFullYear().toString(),
+    //        onClose: function (selectedDate) {
+    //            $("#datepickerfrom").datepicker("option", "maxDate", selectedDate);
+    //        }
+    //    });
+    //});
+
+    //From Date picker
+    //$('#datepickerfrom').datepicker({
+    //    endDate: '0',
+
+
+    //}).on('changeDate', function (selected) {
+
+    //    var minDate = new Date(selected.date.valueOf());
+    //    alert(minDate);
+    //    var selectedDate = '08/03/2017';
+    //    $("#datepickerto").datepicker("option", "startDate", selectedDate);
+    //});
+    ////To Date picker
+    //$('#datepickerto').datepicker({
+    //    endDate: '0',
+    //   // startDate: '08/03/2017',
+    //    autoclose: true,
+    // //   autoclose:function () {
+    //     //   alert('wow');
+    //    //    loadList();
+    //   // }
+    //});
+
+
+
+    $("#datepickerfrom").datepicker({
+        endDate: '0',
+        autoclose: true,
+    }).on('changeDate', function (selected) {
+            var minDate = new Date(selected.date.valueOf());
+            $('#datepickerto').datepicker('setStartDate', minDate);
+        });
+
+
+    $("#datepickerto").datepicker({
+        endDate: '0',
+        autoclose: true,
+    })
+        .on('changeDate', function (selected) {
+            var maxDate = new Date(selected.date.valueOf());
+            $('#datepickerfrom').datepicker('setEndDate', maxDate);
+        });
+
+
+</script>
+

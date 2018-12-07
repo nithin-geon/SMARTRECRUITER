@@ -1,0 +1,56 @@
+﻿body {
+}
+.validateerror {
+
+border-color:red!important;
+
+}
+.not-activeAnchor {
+ pointer-events: none;
+ cursor: default;
+background-color: #b6259a;
+}
+.activeAnchor {
+ 
+}
+
+.edtbtn {
+    margin-right:20px;
+
+}
+
+
+.captchabox {
+ background: url('../images/captcha.jpg')repeat !important ;
+  text-align:center; border:none;font-size:25px !important ;
+            font-weight:bold !important ; font-family:Harrington !important ;width:43%;
+            margin:0px 14px 6px 14px;
+}
+
+.margin {
+     margin-left:14px !important;
+     margin-left:12px ;
+}
+
+
+.neg {margin-top: -11px;
+}
+
+
+.probord {
+    border-radius: 14px;
+
+ border-block-start-style: groove;
+
+border-block-end-width: thick;
+
+border-block-start-color: violet;
+border-top-width: thick;
+border-left-width: thick;
+border-left-style:groove;
+
+border-left-color:black;
+margin:10%;
+
+}
+

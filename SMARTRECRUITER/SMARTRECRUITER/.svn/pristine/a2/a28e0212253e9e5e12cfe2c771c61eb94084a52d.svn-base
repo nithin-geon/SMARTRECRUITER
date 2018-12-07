@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="~/js/AgentLogin.js"></script>
+    <script type="text/javascript" src="~/Login/js/jquery-2.1.4.min.js"></script>
+    @*<link href="~/Login/css/demo3.css" rel="stylesheet" type="text/css" media="all" />*@
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/Login/css/style1.css" />
+    <link href="~/css/Style.css" rel="stylesheet" />
+    @*<link href="~/Login/css/style.css" rel="stylesheet" type="text/css" media="all" />*@
+    <script>
+
+        var api_url = '@ViewBag.api_url'
+
+
+        $(document).ready(function () {
+            ObjAgentlogin.init();
+        });
+    </script>
+    <title>OS TICKETS Login Form</title>
+    <!-- for-mobile-apps -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="Welcome Login Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
+Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+    <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+    <!-- //for-mobile-apps -->
+    <link href="~/Login/css/agentstyle.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+    <!-- main -->
+    <div class="main">
+        <h1>Support Tickets Agent Login</h1>
+            <input id="txtUserName" type="text" value="User Name" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'User Name';}" required>
+            <input id="txtPassword" type="password" value="Password" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'Password';}" required>
+            <div>
+                <div class="re_btn4">
+                    <input type="text" id="txtCaptcha" class="captchabox" disabled />
+                </div>
+                <div class="re_btn1">
+                    <button type="button" id="btnrefresh" class="refreh_btn" ng-click="captchain = null" onclick="ObjAgentlogin.DrawCaptcha();">
+                        <span class="btn-label"><i class="glyphicon glyphicon-refresh"></i></span>
+                    </button>
+                </div>
+                <div class="re_btn3">
+                    <input type="text" class="margin" ng-model="captchain" style="margin: 0px; font-size: 1.5em; width: 115%; border: solid 1px red"><br>
+                </div>
+            </div>
+            <input type="submit" value="Login" onclick="ObjAgentlogin.Submit();">
+    </div>
+    <!-- //main -->
+</body>
+</html>

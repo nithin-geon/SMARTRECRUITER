@@ -1,0 +1,143 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js">
+<!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <link rel="icon" href="../../SupportTicket.jpg" />
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <script src="~/plugins/angularjs/1.4.8/angular.min.js"></script>
+    <script src="~/js/ng-cap.js"></script>
+    <script src="~/js/AgentLogin.js"></script>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/css/Style.css" rel="stylesheet" />
+    <link href="~/AgentLogin/css/font-awesome.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link href="~/AgentLogin/css/style5.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="~/AgentLogin/css/style.css" rel="stylesheet" />
+    <script src="~/AgentLogin/js/jquery-2.1.1.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="~/AgentLogin/css/style1.css" />
+
+
+
+
+    <link href="~/css/Style.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/Bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    @*    <link href="~/Bootstrap/css/font-awesome.min.css" rel="stylesheet" />*@
+    <!-- Ionicons -->
+    @*  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">*@
+    @* <link href="~/Bootstrap/css/ionicons.min.css" rel="stylesheet" />*@
+    <!-- Theme style -->
+
+    <link rel="stylesheet" href="~/dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="~/dist/css/skins/_all-skins.min.css">
+    <!-- iCheck -->
+    <link rel="stylesheet" href="~/Plugins/iCheck/flat/blue.css">
+    <!-- Morris chart -->
+    <link rel="stylesheet" href="~/Plugins/morris/morris.css">
+    <!-- jvectormap -->
+    <link rel="stylesheet" href="~/Plugins/jvectormap/jquery-jvectormap-1.2.2.css">
+    <!-- Date Picker -->
+    <link rel="stylesheet" href="~/Plugins/datepicker/datepicker3.css">
+    <!-- check boc and radio inputs -->
+    <link href="~/Plugins/iCheck/flat/_all.css" rel="stylesheet" />
+
+    <!-- Daterange picker -->
+    <link rel="stylesheet" href="~/Plugins/daterangepicker/daterangepicker-bs3.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="~/Plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <link href="~/Plugins/select2/select2.min.css" rel="stylesheet" />
+    <script src="~/js/Custom.js"></script>
+    <!-- Toaster  -->
+    <script src="~/js/CustomMessage.js"></script>
+    <script src="~/Scripts/jquery.toastmessage.js" type="text/javascript"></script>
+    <link href="~/css/jquery.toastmessage.css" rel="Stylesheet" />
+
+    <link href="~/Plugins/datepicker/datepicker3.css" rel="stylesheet" />
+    <script src="~/js/Masters/Menu.js"></script>
+    <script src="~/js/AgentLogin.js"></script>
+    <script src="~/Plugins/jQuery/jQuery-2.1.4.min.js"></script>
+
+
+
+    <script>
+
+        var api_url = '@ViewBag.api_url'
+
+        $(document).ready(function () {
+
+            ObjAgentlogin.init();
+        });
+    </script>
+</head>
+<body id="page"  class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+           
+            
+            <a href="#"><b>SMART</b>recruiter</a>
+        </div>
+        <!-- /.login-logo -->
+        <div class="login-box-body">
+          
+            <p class="login-box-msg">  <img src="~/Images/gadgeonlogo.JPG"></p>
+            <form action="#" method="post">
+                <div class="form-group has-feedback">
+                    <input id="txtUserName" type="text" value="User Name" class="form-control" placeholder="Username" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'User Name';}">
+
+
+                    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback">
+
+                    <input id="txtPassword" type="password" class="form-control" value="Password" placeholder="Password" onfocus="this.value = '';" onchange="ObjAgentlogin.Validate()" onblur="if (this.value == '') {this.value = 'Password';}">
+
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="row">
+
+                    <div class="col-xs-8">
+                        <div ng-app="myApp" ng-controller="myCtrl">
+                            <div>
+                                <input type="text" id="txtCaptcha" class="captchabox" disabled />
+                            </div>
+                            <div class="re_btnag1">
+                                <button type="button" id="btnrefresh" class="refreh_btnag" ng-click="captchain = null" onclick="ObjAgentlogin.DrawCaptcha();" style="font-size: 25px;">
+                                    <span class="btn-label"><i class="fa fa-refresh"></i></span>
+                                </button>
+                            </div>
+                            <div class="re_btnag3">
+                                <input type="text" id="txtCaptchaInput" style="background:#e7d6d6;" class="txtCaptcha" ng-model="captchain"><br>
+                            </div>
+                            <button id="btnSubmit" type="button" class="btn btn-primary btn-block btn-flat" ng-disabled="capvalid!=true" onclick="ObjAgentlogin.Submit();">Sign in</button>
+                        </div>
+
+                    </div>
+                    <!-- /.col -->
+                </div>
+            </form>
+
+        </div>
+        <!-- /.login-box-body -->
+    </div>
+    
+    @*<script src="~/AgentLogin/js/index.js"></script>*@
+</body>
+</html>

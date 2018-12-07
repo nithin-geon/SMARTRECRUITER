@@ -1,0 +1,84 @@
+﻿
+
+
+// Function for integer checking
+function CheckInteger(e) {
+    var t = e.keyCode ? e.keyCode : e.charCode ? e.charCode : e.which;
+    8 != t && 9 != t && (48 > t || t > 57) && (e.preventDefault ? e.preventDefault() : e.returnValue = !1)
+}
+
+
+// Function in Mobile blur checking :this event 
+function CheckMobileNumberBlur(inputtxt)
+{   
+    try
+    {      
+        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if ((inputtxt.value.match(phoneno))) {             
+            $("#" + inputtxt.id).removeClass("validateerror");         
+        }
+        else {             
+            $("#" + inputtxt.id).addClass("validateerror");            
+     
+        }     
+     
+    }
+    catch(e)
+    {
+        alert(e+'CheckMobileNumber')
+    }
+}
+
+
+// Function in Validate  submit button: control name:MobileNo
+function CheckMobileNumberSubmit(inputtxt) {
+    try {
+       
+        var phoneno = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+        if (($("#" + inputtxt).val().match(phoneno))) {              
+            return false;
+        }
+        else {         
+            return true;
+        }
+
+    }
+    catch (e) {
+        alert(e + 'CheckMobileNumber')
+    }
+}
+
+// Function in EmailId blur checking :this event 
+function CheckEmailBlur(inputtxt) {
+    try {
+        var email = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        if ((inputtxt.value.match(email))) {
+            $("#" + inputtxt.id).removeClass("validateerror");
+        }
+        else {
+            $("#" + inputtxt.id).addClass("validateerror");
+
+        }
+
+    }
+    catch (e) {
+        alert(e + 'CheckEmail')
+    }
+}
+
+// Function in Validate  submit button: control name :Email
+function CheckEmailSubmit(inputtxt) {
+    try {
+        var email = /^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$/;
+        if (($("#" + inputtxt).val().match(email))) {
+            return false;
+        }
+        else {
+            return true;
+        }
+
+    }
+    catch (e) {
+        alert(e + 'CheckEmail')
+    }
+}
