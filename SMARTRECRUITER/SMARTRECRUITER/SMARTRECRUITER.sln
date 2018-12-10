@@ -3,29 +3,29 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMARTRECRUITER", "SupportTicket\SMARTRECRUITER.csproj", "{D7C52AC0-8C30-4C85-8F4A-94E2D73CC662}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SMARTRECRUITER", "SmartRecruiter\SMARTRECRUITER.csproj", "{D7C52AC0-8C30-4C85-8F4A-94E2D73CC662}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataHandler", "DataHandler", "{B58541AA-6C65-40D2-A9AA-8E518A462AD1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Common", "DataAccess\SupportTicket.DataAccess.Common\SmartRecruiter.DataAccess.Common.csproj", "{A09297C8-2C40-470B-8856-D856676DDFFA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Common", "DataAccess\SmartRecruiter.DataAccess.Common\SmartRecruiter.DataAccess.Common.csproj", "{A09297C8-2C40-470B-8856-D856676DDFFA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Data", "DataAccess\SupportTicket.DataAccess.Data\SmartRecruiter.DataAccess.Data.csproj", "{D349B6D8-992F-443F-BB57-57E50DD98794}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Data", "DataAccess\SmartRecruiter.DataAccess.Data\SmartRecruiter.DataAccess.Data.csproj", "{D349B6D8-992F-443F-BB57-57E50DD98794}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Masters", "Masters", "{965475D3-9471-4C21-A1C7-1481BA53E2B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Business.Masters", "Business\SupportTicket.Business.Masters\SmartRecruiter.Business.Masters.csproj", "{B00FC126-EAB0-4671-8E9F-78AFA0989ECF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Business.Masters", "Business\SmartRecruiter.Business.Masters\SmartRecruiter.Business.Masters.csproj", "{B00FC126-EAB0-4671-8E9F-78AFA0989ECF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Masters", "DataAccess\SupportTicket.DataAccess.Masters\SmartRecruiter.DataAccess.Masters.csproj", "{E7DA5CB3-C8B8-4AEB-AE64-036B17741C5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess.Masters", "DataAccess\SmartRecruiter.DataAccess.Masters\SmartRecruiter.DataAccess.Masters.csproj", "{E7DA5CB3-C8B8-4AEB-AE64-036B17741C5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Interface.Masters", "Interfaces\SupportTicket.Interface.Masters\SmartRecruiter.Interface.Masters.csproj", "{5A417DCC-307D-44D2-B7CF-58CA533FB38C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Interface.Masters", "Interfaces\SmartRecruiter.Interface.Masters\SmartRecruiter.Interface.Masters.csproj", "{5A417DCC-307D-44D2-B7CF-58CA533FB38C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{6D502AC3-46AD-4C53-BB40-20B914E4238E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Business", "Business\SupportTicket.Business\SmartRecruiter.Business.csproj", "{FB768E4A-6CF2-451B-8905-6DB5A93C9FAB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Business", "Business\SmartRecruiter.Business\SmartRecruiter.Business.csproj", "{FB768E4A-6CF2-451B-8905-6DB5A93C9FAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess", "DataAccess\SupportTicket.DataAccess\SmartRecruiter.DataAccess.csproj", "{599854BC-9915-45AA-8689-1615CF7D83FE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.DataAccess", "DataAccess\SmartRecruiter.DataAccess\SmartRecruiter.DataAccess.csproj", "{599854BC-9915-45AA-8689-1615CF7D83FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Interface", "Interfaces\SupportTicket.Interface\SmartRecruiter.Interface.csproj", "{1C3C6EFB-6B30-4D2D-9F98-F537B704B33A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartRecruiter.Interface", "Interfaces\SmartRecruiter.Interface\SmartRecruiter.Interface.csproj", "{1C3C6EFB-6B30-4D2D-9F98-F537B704B33A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
