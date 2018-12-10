@@ -1,0 +1,636 @@
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionUpdate]    Script Date: 06/12/2018 7:41:08 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*----------------------------------------------------------------------------------
+Purpose    : 
+Author     : Nithin Das H
+Copyright  : d
+Created on : 03/01/2017
+Input      : 
+Output     : 
+------------------------------------------------------------------------------------
+MODIFICATIONS 
+On      By       OMID
+------------------------------------------------------------------------------------
+03/01/2017	Nithin Das H	0
+------------------------------------------------------------------------------------*/
+CREATE PROCEDURE [dbo].[proPositionUpdate]
+				@UserAction Tinyint=0,
+				@ID_Position BIGINT=0,
+				@PositionCode NVARCHAR(200)='',
+				@PositionName NVARCHAR(500)='',			
+				@SortOrder BIGINT=0,
+				@UserCode BIGINT=0,
+				@FK_Company BIGINT=1,
+				@AuditData VARCHAR(8000)='',
+				@FK_Page BIGINT=0,
+				@Active BIT
+AS
+SET NOCOUNT ON
+DECLARE @Count INT,@ErrCode INT,@Passed BIT,@CashierPassed BIT,@EffectedRows INT,@DbName Varchar(30),@OptionalCnd Varchar(250),@ErrMsg VARCHAR(2000),@Balance DECIMAL(14,2),@ModID BIGINT
+,@AtDate SMALLDATETIME
+SELECT @ErrCode=0,@DbName=Db_Name(),@Balance =0,@ModID=0
+SET @AtDate=dbo.funGetDate()
+BEGIN TRY		
+
+	
+	BEGIN TRANSACTION	
+			
+		IF @UserAction =1
+		BEGIN	
+									
+				---Check Permission...
+		EXEC proCmnCheckAgentAccess @UserAction,'Position',@FK_Company, @UserCode,@ErrCode OUTPUT				
+		IF @ErrCode <> 0
+		BEGIN
+			SELECT @ErrCode	
+			ROLLBACK TRANSACTION	
+			RETURN
+		END	
+									
+			---Check Whether Already Exist...
+				SET @OptionalCnd='0=0 OR PositionCode='+''''+@PositionCode+''''+ ') AND cancelled=0  AND  FK_Company='+ Cast(@FK_Company AS Varchar)
+				EXEC @Count= dbo.funCmnCheckExisting 'Position','(PositionName',@PositionName,@OptionalCnd
+				IF @Count> 0 SET @ErrCode=-2				
+				IF @ErrCode<>0
+				BEGIN
+					SELECT @ErrCode
+					ROLLBACK TRANSACTION
+					RETURN
+				END
+
+			INSERT INTO Position(	
+				PositionCode,
+				PositionName,			
+				SortOrder,
+				UserCode,
+				UserDate,
+				Cancelled,
+				Active,
+				FK_Company)
+			VALUES (
+				@PositionCode,
+				@PositionName,			
+				@SortOrder,
+				@UserCode,
+				dbo.funGetDate(),
+				0,
+				@Active,
+				@FK_Company)
+			SELECT @ID_Position=SCOPE_IDENTITY();
+		 		----Update AuditTrail
+				SEt @AuditData='Inserted ID_Position- '+''+CONVERT(varchar(200), @ID_Position)																													
+				IF @ID_Position>0 
+				EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_Position,@AuditData,'Position',@FK_Company,@UserCode,NULL,NULL,NULL,'PositionCode',@PositionCode,'PositionName',@PositionName,'Active',@Active,'SortOrder',@SortOrder
+				----Update AuditTrail
+			SELECT @ID_Position
+		END
+		ELSE IF @UserAction =2
+		BEGIN
+
+				---Check Permission...
+			EXEC proCmnCheckAgentAccess @UserAction,'Position',@FK_Company, @UserCode,@ErrCode OUTPUT				
+			IF @ErrCode <> 0
+			BEGIN
+				SELECT @ErrCode	
+				ROLLBACK TRANSACTION	
+				RETURN
+			END	
+			---Check Whether Already Exist...
+				SET @OptionalCnd='0=0 OR PositionCode='+''''+@PositionCode+''''+ ') AND cancelled=0 AND ID_Position<>'+ Cast(@ID_Position AS Varchar)+' AND  FK_Company='+ Cast(@FK_Company AS Varchar)
+				EXEC @Count= dbo.funCmnCheckExisting 'Position','(PositionName',@PositionName,@OptionalCnd
+				IF @Count> 0 SET @ErrCode=-2
+				IF @ErrCode<>0
+				BEGIN
+					SELECT @ErrCode
+					ROLLBACK TRANSACTION
+					RETURN
+				END
+				----Update AuditTrail
+					SET @AuditData='Updated ID_Position- '+''+CONVERT(varchar(200), @ID_Position)				
+					IF @ID_Position>0 
+					EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_Position,@AuditData,'Position',@FK_Company,@UserCode,NULL,NULL,NULL,'PositionCode',@PositionCode,'PositionName',@PositionName,'Active',@Active,'SortOrder',@SortOrder
+				UPDATE	Position
+				SET
+					PositionCode = @PositionCode,
+					PositionName = @PositionName,				
+					Cancelled=0,
+					Active=@Active,
+					SortOrder=@SortOrder,
+					FK_Company = @FK_Company
+				WHERE	ID_Position = @ID_Position								
+				SELECT @ID_Position
+				--SELECT @EffectedRows=@@ROWCOUNT
+				--SELECT @EffectedRows
+		END
+			
+	COMMIT TRANSACTION 
+END TRY 
+
+BEGIN CATCH 
+	SET @ErrCode=-1
+	SELECT @ErrCode
+	SELECT @ErrMsg=ERROR_MESSAGE()
+	print ERROR_MESSAGE()
+	ROLLBACK TRANSACTION 
+	--EXEC ProUpdateErrorLog	@UserAction,'',@SubModule,@DbName,'',@ErrMsg,@BranchCodeUser,@FK_Machine,@UserCode
+END CATCH 
+
+
+
+
+
+
+
+GO
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionSelect]    Script Date: 06/12/2018 7:40:48 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Select Position
+Author     : Nithin Das H
+Copyright  : d
+Created on : 03/01/2016
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+16/01/2017  Nithin Das H    searchBox
+-----------------------------------------------------------------------------------*/
+
+CREATE PROCEDURE [dbo].[proPositionSelect]
+		@ID_Position BIGINT=0,
+		@PositionCode NVARCHAR(200)='',
+		@PositionName NVARCHAR(500)='',
+		@PageIndex int=1, 
+		@PageSize int=10,
+		@FK_Company BIGINT=1
+	
+AS BEGIN
+
+SET NOCOUNT ON
+
+DECLARE @TotalRecord BIGINT
+
+	SELECT @TotalRecord=COUNT(@ID_Position) FROM Position P 
+	WHERE 	P.ID_Position=CASE WHEN @ID_Position>0 THEN @ID_Position ELSE P.ID_Position  END
+		AND P.Cancelled=0 AND FK_Company=@FK_Company
+		AND( P.PositionCode LIKE '%'+@PositionCode+'%'
+		OR P.PositionName LIKE '%'+@PositionName+'%')
+
+	;WITH CTE AS 
+	(
+		SELECT  ROW_NUMBER() OVER (ORDER BY ID_Position DESC ) AS SlNo,ID_Position,PositionCode,PositionName,SortOrder,
+		UserCode,UserDate,Cancelled,CancelledUser,CancelledOn,FK_Company,Active FROM Position P
+		WHERE 	P.ID_Position=CASE WHEN @ID_Position>0 THEN @ID_Position ELSE P.ID_Position  END
+		AND P.Cancelled=0 AND FK_Company=@FK_Company
+		AND( P.PositionCode LIKE '%'+@PositionCode+'%'
+		OR P.PositionName LIKE '%'+@PositionName+'%')
+  	)
+	
+SELECT	ID_Position,
+		PositionCode,
+		PositionName,	
+		SortOrder,
+		UserCode,
+		UserDate,
+		Cancelled,
+		CancelledUser,
+		CancelledOn,
+		FK_Company,
+		SlNo,
+		Active,
+		ISNULL(@TotalRecord,0) as RecordCount	
+FROM 
+		CTE
+WHERE SLNO>=(@PageIndex-1) * @PageSize + 1 AND SLNO <=(((@PageIndex-1) * @PageSize+ 1) + @PageSize)-1
+END
+
+
+
+GO
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionDelete]    Script Date: 06/12/2018 7:40:21 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*--------------------------------------------------------------------------------
+Purpose    : 
+Author     : Nithin Das H 
+Copyright  : d
+Created on : 27/12/2016
+Input      : 
+Output     : 
+----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+----------------------------------------------------------------------------------*/
+
+CREATE PROCEDURE [dbo].[proPositionDelete]
+			@ID_Position BIGINT=0,
+		    @CancelledUser BIGINT=0,
+			@FK_Company BIGINT=1,		
+			@FK_Page BIGINT=0
+AS
+SET NOCOUNT ON
+
+DECLARE @Count int,@ErrCode Int,@EffectedRows Int,@Passed BIT,@SqlDeleteQuery VARCHAR(3500),@DbName Varchar(30),@ErrMsg VARCHAR(2000),@AuditData VARCHAR(8000)='',@AtDate DATETIME
+SET @AtDate =dbo.funGetDate()
+SELECT @ErrCode=0,@DbName=Db_Name()
+BEGIN TRY
+	
+	BEGIN TRANSACTION
+		BEGIN
+					---Check Permission...
+			EXEC proCmnCheckAgentAccess 3,'Position',@FK_Company, @CancelledUser,@ErrCode OUTPUT				
+			IF @ErrCode <> 0
+			BEGIN
+				SELECT @ErrCode	
+				ROLLBACK TRANSACTION	
+				RETURN
+			END	
+			---Check Here IsDeletable
+			EXEC @Count= dbo.funCmnCheckReference 'Position',@ID_Position
+			IF @Count> 0 SET @ErrCode=-3
+			IF @ErrCode<>0
+			BEGIN
+				SELECT @ErrCode
+				ROLLBACK TRANSACTION
+				RETURN
+			END
+
+			UPDATE	Position
+			SET	 Cancelled = 1,
+				 CancelledUser=@CancelledUser,
+				 CancelledOn=dbo.funGetDate()
+			WHERE	ID_Position = @ID_Position AND FK_Company= @FK_Company
+
+			----Update AuditTrail
+				SET @AuditData='Deleted ID_Position- '+''+CONVERT(varchar(200), @ID_Position)								
+				IF @ID_Position>0 
+				EXEC proAuditTrailUpdate @AtDate,3,@ID_Position,@AuditData,'Position',@FK_Company,@CancelledUser,NULL,NULL,NULL
+			SELECT @EffectedRows=@@ROWCOUNT 
+			SELECT @EffectedRows
+		END
+	COMMIT TRANSACTION 
+END TRY 
+
+BEGIN CATCH 
+	SET @ErrCode=-1
+	SELECT @ErrCode
+	SELECT @ErrMsg=ERROR_MESSAGE()
+	SELECT @ErrMsg
+	ROLLBACK TRANSACTION 
+	--EXEC ProUpdateErrorLog	@UserAction,'',@SubModule,@DbName,'',@ErrMsg,@BranchCodeUser,@FK_Machine,@UserCode
+END CATCH 
+
+
+
+
+
+
+GO
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionRequestDelete]    Script Date: 06/12/2018 7:44:21 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*--------------------------------------------------------------------------------
+Purpose    : 
+Author     : Nithin Das H 
+Copyright  : d
+Created on : 27/12/2016
+Input      : 
+Output     : 
+----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+----------------------------------------------------------------------------------*/
+
+ALTER PROCEDURE [dbo].[proPositionRequestDelete]
+			@ID_PositionRequest BIGINT=0,
+		    @CancelledUser BIGINT=0,
+			@FK_Company BIGINT=1,		
+			@FK_Page BIGINT=0
+AS
+SET NOCOUNT ON
+
+DECLARE @Count int,@ErrCode Int,@EffectedRows Int,@Passed BIT,@SqlDeleteQuery VARCHAR(3500),@DbName Varchar(30),@ErrMsg VARCHAR(2000),@AuditData VARCHAR(8000)='',@AtDate DATETIME
+SET @AtDate =dbo.funGetDate()
+SELECT @ErrCode=0,@DbName=Db_Name()
+BEGIN TRY
+	
+	BEGIN TRANSACTION
+		BEGIN
+					---Check Permission...
+			EXEC proCmnCheckAgentAccess 3,'PositionRequest',@FK_Company, @CancelledUser,@ErrCode OUTPUT				
+			IF @ErrCode <> 0
+			BEGIN
+				SELECT @ErrCode	
+				ROLLBACK TRANSACTION	
+				RETURN
+			END	
+			---Check Here IsDeletable
+			EXEC @Count= dbo.funCmnCheckReference 'PositionRequest',@ID_PositionRequest
+			IF @Count> 0 SET @ErrCode=-3
+			IF @ErrCode<>0
+			BEGIN
+				SELECT @ErrCode
+				ROLLBACK TRANSACTION
+				RETURN
+			END
+
+			UPDATE	PositionRequest
+			SET	 Cancelled = 1,
+				 CancelledUser=@CancelledUser,
+				 CancelledOn=dbo.funGetDate()
+			WHERE	ID_PositionRequest = @ID_PositionRequest AND FK_Company= @FK_Company
+
+			----Update AuditTrail
+				SET @AuditData='Deleted ID_PositionRequest- '+''+CONVERT(varchar(200), @ID_PositionRequest)								
+				IF @ID_PositionRequest>0 
+				EXEC proAuditTrailUpdate @AtDate,3,@ID_PositionRequest,@AuditData,'PositionRequest',@FK_Company,@CancelledUser,NULL,NULL,NULL
+			SELECT @EffectedRows=@@ROWCOUNT 
+			SELECT @EffectedRows
+		END
+	COMMIT TRANSACTION 
+END TRY 
+
+BEGIN CATCH 
+	SET @ErrCode=-1
+	SELECT @ErrCode
+	SELECT @ErrMsg=ERROR_MESSAGE()
+	SELECT @ErrMsg
+	ROLLBACK TRANSACTION 
+	--EXEC ProUpdateErrorLog	@UserAction,'',@SubModule,@DbName,'',@ErrMsg,@BranchCodeUser,@FK_Machine,@UserCode
+END CATCH 
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionRequestSelect]    Script Date: 06/12/2018 7:45:14 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Select PositionRequest
+Author     : Nithin Das H
+Copyright  : d
+Created on : 03/01/2016
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+16/01/2017  Nithin Das H    searchBox
+-----------------------------------------------------------------------------------*/
+
+CREATE PROCEDURE [dbo].[proPositionRequestSelect]
+		@ID_PositionRequest BIGINT=0,
+		@PositionRequestCode NVARCHAR(200)='',
+		@PositionRequestName NVARCHAR(500)='',
+		@PageIndex int=1, 
+		@PageSize int=10,
+		@FK_Company BIGINT=1
+	
+AS BEGIN
+
+SET NOCOUNT ON
+
+DECLARE @TotalRecord BIGINT
+
+	SELECT @TotalRecord=COUNT(@ID_PositionRequest) FROM PositionRequest P 
+	WHERE 	P.ID_PositionRequest=CASE WHEN @ID_PositionRequest>0 THEN @ID_PositionRequest ELSE P.ID_PositionRequest  END
+		AND P.Cancelled=0 AND FK_Company=@FK_Company
+		AND( P.PositionRequestCode LIKE '%'+@PositionRequestCode+'%'
+		OR P.PositionRequestName LIKE '%'+@PositionRequestName+'%')
+
+	;WITH CTE AS 
+	(
+		SELECT  ROW_NUMBER() OVER (ORDER BY ID_PositionRequest DESC ) AS SlNo,ID_PositionRequest,PositionRequestCode,PositionRequestName,SortOrder,
+		UserCode,UserDate,Cancelled,CancelledUser,CancelledOn,FK_Company,Active,
+		OpenDate,TargetDate,Count,FK_Position FROM PositionRequest P
+		WHERE 	P.ID_PositionRequest=CASE WHEN @ID_PositionRequest>0 THEN @ID_PositionRequest ELSE P.ID_PositionRequest  END
+		AND P.Cancelled=0 AND FK_Company=@FK_Company
+		AND( P.PositionRequestCode LIKE '%'+@PositionRequestCode+'%'
+		OR P.PositionRequestName LIKE '%'+@PositionRequestName+'%')
+  	)
+	
+SELECT	ID_PositionRequest,
+		PositionRequestCode,
+		PositionRequestName,
+		OpenDate,TargetDate,Count,FK_Position,
+		SortOrder,
+		UserCode,
+		UserDate,
+		Cancelled,
+		CancelledUser,
+		CancelledOn,
+		FK_Company,
+		SlNo,
+		Active,
+		ISNULL(@TotalRecord,0) as RecordCount	
+FROM 
+		CTE
+WHERE SLNO>=(@PageIndex-1) * @PageSize + 1 AND SLNO <=(((@PageIndex-1) * @PageSize+ 1) + @PageSize)-1
+END
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proPositionRequestUpdate]    Script Date: 06/12/2018 7:47:03 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*----------------------------------------------------------------------------------
+Purpose    : 
+Author     : Nithin Das H
+Copyright  : d
+Created on : 03/01/2017
+Input      : 
+Output     : 
+------------------------------------------------------------------------------------
+MODIFICATIONS 
+On      By       OMID
+------------------------------------------------------------------------------------
+03/01/2017	Nithin Das H	0
+------------------------------------------------------------------------------------*/
+CREATE PROCEDURE [dbo].[proPositionRequestUpdate]
+				@UserAction Tinyint=0,
+				@ID_PositionRequest BIGINT=0,
+				@PositionRequestCode NVARCHAR(200)='',
+				@PositionRequestName NVARCHAR(500)='',
+				@OpenDate DATETIME,
+				@TargetDate DATETIME,				
+				@PositionCount  BIGINT=0,
+				@FK_Position  BIGINT=0,			
+				@SortOrder BIGINT=0,
+				@UserCode BIGINT=0,
+				@FK_Company BIGINT=1,
+				@AuditData VARCHAR(8000)='',
+				@FK_Page BIGINT=0,
+				@Active BIT
+AS
+SET NOCOUNT ON
+DECLARE @Count INT,@ErrCode INT,@Passed BIT,@CashierPassed BIT,@EffectedRows INT,@DbName Varchar(30),@OptionalCnd Varchar(250),@ErrMsg VARCHAR(2000),@Balance DECIMAL(14,2),@ModID BIGINT
+,@AtDate SMALLDATETIME
+SELECT @ErrCode=0,@DbName=Db_Name(),@Balance =0,@ModID=0
+SET @AtDate=dbo.funGetDate()
+BEGIN TRY		
+
+	
+	BEGIN TRANSACTION	
+			
+		IF @UserAction =1
+		BEGIN	
+									
+				---Check Permission...
+		EXEC proCmnCheckAgentAccess @UserAction,'PositionRequest',@FK_Company, @UserCode,@ErrCode OUTPUT				
+		IF @ErrCode <> 0
+		BEGIN
+			SELECT @ErrCode	
+			ROLLBACK TRANSACTION	
+			RETURN
+		END	
+									
+			---Check Whether Already Exist...
+				SET @OptionalCnd='0=0 OR PositionRequestCode='+''''+@PositionRequestCode+''''+ ') AND cancelled=0  AND  FK_Company='+ Cast(@FK_Company AS Varchar)
+				EXEC @Count= dbo.funCmnCheckExisting 'PositionRequest','(PositionRequestName',@PositionRequestName,@OptionalCnd
+				IF @Count> 0 SET @ErrCode=-2				
+				IF @ErrCode<>0
+				BEGIN
+					SELECT @ErrCode
+					ROLLBACK TRANSACTION
+					RETURN
+				END
+
+			INSERT INTO PositionRequest(	
+				PositionRequestCode,
+				PositionRequestName,	
+				OpenDate ,
+				TargetDate ,
+				Count,
+				FK_Position , 		
+				SortOrder,
+				UserCode,
+				UserDate,
+				Cancelled,
+				Active,
+				FK_Company)
+			VALUES (
+				@PositionRequestCode,
+				@PositionRequestName,
+				@OpenDate ,
+				@TargetDate ,
+				@PositionCount,
+				@FK_Position , 			
+				@SortOrder,
+				@UserCode,
+				dbo.funGetDate(),
+				0,
+				@Active,
+				@FK_Company)
+			SELECT @ID_PositionRequest=SCOPE_IDENTITY();
+		 		----Update AuditTrail
+				SEt @AuditData='Inserted ID_PositionRequest- '+''+CONVERT(varchar(200), @ID_PositionRequest)																													
+				IF @ID_PositionRequest>0 
+				EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_PositionRequest,@AuditData,'PositionRequest',@FK_Company,@UserCode,NULL,NULL,NULL,'PositionRequestCode',@PositionRequestCode,'PositionRequestName',@PositionRequestName,'Active',@Active,'SortOrder',@SortOrder
+				----Update AuditTrail
+			SELECT @ID_PositionRequest
+		END
+		ELSE IF @UserAction =2
+		BEGIN
+
+				---Check Permission...
+			EXEC proCmnCheckAgentAccess @UserAction,'PositionRequest',@FK_Company, @UserCode,@ErrCode OUTPUT				
+			IF @ErrCode <> 0
+			BEGIN
+				SELECT @ErrCode	
+				ROLLBACK TRANSACTION	
+				RETURN
+			END	
+			---Check Whether Already Exist...
+				SET @OptionalCnd='0=0 OR PositionRequestCode='+''''+@PositionRequestCode+''''+ ') AND cancelled=0 AND ID_PositionRequest<>'+ Cast(@ID_PositionRequest AS Varchar)+' AND  FK_Company='+ Cast(@FK_Company AS Varchar)
+				EXEC @Count= dbo.funCmnCheckExisting 'PositionRequest','(PositionRequestName',@PositionRequestName,@OptionalCnd
+				IF @Count> 0 SET @ErrCode=-2
+				IF @ErrCode<>0
+				BEGIN
+					SELECT @ErrCode
+					ROLLBACK TRANSACTION
+					RETURN
+				END
+				----Update AuditTrail
+					SET @AuditData='Updated ID_PositionRequest- '+''+CONVERT(varchar(200), @ID_PositionRequest)				
+					IF @ID_PositionRequest>0 
+					EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_PositionRequest,@AuditData,'PositionRequest',@FK_Company,@UserCode,NULL,NULL,NULL,'PositionRequestCode',@PositionRequestCode,'PositionRequestName',@PositionRequestName,'Active',@Active,'SortOrder',@SortOrder
+				UPDATE	PositionRequest
+				SET
+					PositionRequestCode = @PositionRequestCode,
+					PositionRequestName = @PositionRequestName,	
+					OpenDate =@OpenDate ,
+					TargetDate=@TargetDate ,
+					Count=@PositionCount,
+					FK_Position = 	@FK_Position , 				
+					Cancelled=0,
+					Active=@Active,
+					SortOrder=@SortOrder,
+					FK_Company = @FK_Company
+				WHERE	ID_PositionRequest = @ID_PositionRequest								
+				SELECT @ID_PositionRequest
+				--SELECT @EffectedRows=@@ROWCOUNT
+				--SELECT @EffectedRows
+		END
+			
+	COMMIT TRANSACTION 
+END TRY 
+
+BEGIN CATCH 
+	SET @ErrCode=-1
+	SELECT @ErrCode
+	SELECT @ErrMsg=ERROR_MESSAGE()
+	print ERROR_MESSAGE()
+	ROLLBACK TRANSACTION 
+	--EXEC ProUpdateErrorLog	@UserAction,'',@SubModule,@DbName,'',@ErrMsg,@BranchCodeUser,@FK_Machine,@UserCode
+END CATCH 
+
+
+
+
+
+
+

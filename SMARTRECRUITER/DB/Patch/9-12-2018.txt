@@ -1,0 +1,197 @@
+
+GO
+/****** Object:  StoredProcedure [dbo].[proAgentTicketNotification]    Script Date: 09/12/2018 10:09:12 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Agent Ticket Notification Count
+Author     : Nithin Das H
+Copyright  : d
+Created on : 31/01/2017
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+-----------------------------------------------------------------------------------
+31/01/2017	Nithin Das H	0
+04/02/2017	Nithin Das H		Overdue  75370 
+21/2/2017   Nithin Das H     Agent overdue
+21/2/2017   Nithin Das H     AssignTickets
+-----------------------------------------------------------------------------------*/
+
+ALTER PROCEDURE [dbo].[proAgentTicketNotification]
+		@AgentCode BIGINT=0,
+		@FK_Company BIGINT=1
+	
+AS
+ BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @PendingJobs DECIMAL(18,2),@OpenTickets DECIMAL(18,2),@ResolvedTickets DECIMAL(18,2),@ClosedTickets DECIMAL(18,2),@AssignedTickets DECIMAL(18,2),
+	@TotalTickets DECIMAL(18,2),@ClientOverDue DECIMAL(18,2),@DepID BIGINT,@Admin BIT,@TotalAgentOverDue DECIMAL(18,2),@TotalClosed DECIMAL(18,2),
+	@countTotalTickets DECIMAL(18,2),@AdminDepID BIGINT
+
+	SELECT @Admin=Administrator FROM Agent WHERE ID_Agent=@AgentCode
+	SET @Admin= ISNULL(@Admin,0)
+	IF @Admin=1
+	BEGIN
+		SET @DepID=-2
+		SELECT @AdminDepID=ISNULL(FK_Department,0) FROM Agent WHERE ID_Agent=@AgentCode
+	END
+	ELSE
+	BEGIN
+		SELECT @DepID=ISNULL(FK_Department,0) FROM Agent WHERE ID_Agent=@AgentCode AND Manager=1
+	END
+	SET @DepID= ISNULL(@DepID,0)
+	
+	SELECT @TotalTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company) v
+
+	SELECT @countTotalTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company) v
+
+	SELECT @PendingJobs=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND T.FK_Company=@FK_Company --AND T.TickStatus=1 
+	 AND (TD.AgentTo=@AgentCode OR TD.FK_Department = CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+		AND ((T.AgentNotSeen=1 AND (TD.FK_Department=@DepID OR TD.FK_Department=@AdminDepID)) OR T.LastAssignedAgent=@AgentCode)) v
+
+	SELECT @OpenTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company AND T.TickStatus=1) v
+
+	SELECT @ResolvedTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company AND T.TickStatus=2) v
+
+	SELECT @ClosedTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0 AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company AND T.TickStatus=3) v
+
+	SELECT @ClientOverDue=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	FROM Tickets T 
+		LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+		LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+	WHERE T.Cancelled=0  AND (TD.AgentTo=@AgentCode OR TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+			AND T.FK_Company=@FK_Company AND T.TickStatus<>3  AND T.OverDueDate<=dbo.funGetDate() ) v
+	
+     SELECT @AssignedTickets=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+	 from Tickets T
+		 LEFT JOIN TicketDetails TD on T.ID_Tickets=TD.FK_Tickets
+	 WHERE T.FK_Company=@FK_Company AND TD.AgentTo=@AgentCode AND TD.AgentFrom!=0 AND T.Cancelled=0  
+	-- AND (TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+	 ) v
+
+          SELECT @TotalAgentOverDue=COUNT(*) FROM (select  DISTINCT ID_Tickets 
+	 from Tickets T
+		 LEFT JOIN TicketDetails TD on T.ID_Tickets=TD.FK_Tickets
+	 WHERE T.FK_Company=@FK_Company AND TD.AgentOverDue=1 AND T.Cancelled=0  
+	--AND (TD.FK_Department =CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+	AND (TD.AgentCode=@AgentCode )
+	) v
+
+
+
+
+
+	SET @TotalTickets=ISNULL(@TotalTickets,1)
+	IF @TotalTickets=0 SET @TotalTickets=1
+	SELECT @PendingJobs Tasks,CASE WHEN @PendingJobs=0 THEN 0 ELSE( (@ClientOverDue/@TotalTickets)*100) END OverDue,
+	--(
+	@PendingJobs
+	--/@TotalTickets)*100 
+	PendingResumes,(@OpenTickets/@TotalTickets)*100 OpenTickets,
+	 (@ResolvedTickets/@TotalTickets)*100 ResolvedTickets,@ClosedTickets ClosedTickets,@OpenTickets OpnTkts,
+	 @ResolvedTickets as ResTickets,@ClientOverDue OverDueCount,@TotalAgentOverDue AgentOverDueCount,@AssignedTickets AssignedTickets,@countTotalTickets TotalTickets
+END
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proRecruitersStatusCount]    Script Date: 10/12/2018 3:37:35 AM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Agent Ticket Notification Count
+Author     : Nithin Das H
+Copyright  : d
+Created on : 31/01/2017
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------*/
+
+ALTER PROCEDURE [dbo].[proRecruitersStatusCount]
+		@AgentCode BIGINT=0,
+		@FK_Company BIGINT=1
+	
+AS
+ BEGIN
+
+	SET NOCOUNT ON
+	DECLARE @PendingJobs DECIMAL(18,2),@OpenTickets DECIMAL(18,2),@ResolvedTickets DECIMAL(18,2),@ClosedTickets DECIMAL(18,2),@AssignedTickets DECIMAL(18,2),
+	@TotalTickets DECIMAL(18,2),@ClientOverDue DECIMAL(18,2),@DepID BIGINT,@Admin BIT,@TotalAgentOverDue DECIMAL(18,2),@TotalClosed DECIMAL(18,2),
+	@countTotalTickets DECIMAL(18,2),@AdminDepID BIGINT
+
+	
+SELECT ISNULL(S.StatusName,'UnKnown Status') StatusName,COUNT(TickStatus) as StatusCount from Tickets T 
+LEFT JOIN Status S ON T.TickStatus=S.ID_Status
+WHERE T.Cancelled=0 
+GROUP BY StatusName,TickStatus 
+
+
+SELECT A.AgName,count(AgentCode) as ProcessCount From TicketDetails T LEFT JOIN
+ Agent A ON T.AgentCode=A.ID_Agent WHERE T.Cancelled=0  GROUP BY Agname,AgentCode
+
+SELECT CONVERT(nvarchar(10), T.EnteredOn,103) TransDate ,ISNULL(S.StatusName,'UnKnown Status') StatusName,COUNT(T.TransStatus) as StatusCount 
+from TicketDetails T LEFT JOIN Status S ON T.TransStatus=S.ID_Status WHERE T.Cancelled=0 
+GROUP BY StatusName,TransStatus, T.EnteredOn
+ORDER BY StatusName
+
+
+SELECT PR.PositionRequestName, P.PositionName,(PR.PositionRequestName+'--'+P.PositionName) as OpenRequest,PR.Count as OpenCount,
+ISNULL(count(T.FK_PositionRequest),0) as FillingCount ,ISNULL( count(CASE WHEN S.StatusName='Joined' THEN 1 ELSE NULL END) ,0) as Joined,DATEDIFF(day,PR.TargetDate,getdate()) as OverDue from PositionRequest PR 
+LEFT JOIN Position P ON PR.FK_Position=P.ID_Position
+LEFT JOIN Tickets T ON T.FK_PositionRequest=PR.ID_PositionRequest
+LEFT JOIN Status S ON T.TickStatus=s.ID_Status
+WHERE T.Cancelled=0 AND P.Cancelled=0 AND PR.Cancelled=0 AND S.Cancelled=0
+GROUP BY PR.PositionRequestName, P.PositionName,PR.Count,PR.TargetDate
+
+
+
+
+
+
+
+END
+

@@ -1,0 +1,454 @@
+
+GO
+/****** Object:  StoredProcedure [dbo].[proResumesSelect]    Script Date: 08/12/2018 10:30:57 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Select Tickets Master
+Author     : Nithin Das H
+Copyright  : d
+Created on : 08-12-2018
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+-----------------------------------------------------------------------------------
+Select for all resumes
+-----------------------------------------------------------------------------------*/
+
+ALTER PROCEDURE [dbo].[proResumesSelect]
+		@ID_Tickets BIGINT=0,
+		@TickNo NVARCHAR(200)='',
+		@TickSubject NVARCHAR(500)='',
+		@Status INT=0,
+		@PageIndex int=1, 
+		@PageSize int=10,
+		@UserCode BIGINT=0,
+		@ClientName NVARCHAR(200)='',
+		@FK_Company BIGINT=1
+	
+AS BEGIN
+
+SET NOCOUNT ON
+
+SELECT ID_Tickets,TickDate,TickNo,TickStatus,TickSubject,TickPriority,FK_Product,FK_Topic,FK_Client,
+candidatename,candidateemailid,candidatemob,(SELECT TOP 1 FK_department from TicketDetails
+ where FK_Tickets=@ID_Tickets ORDER BY ID_TicketDetails ASC) as FK_Department,FK_PositionRequest
+  from Tickets WHERE ID_Tickets=@ID_Tickets
+END
+
+--Select * from Tickets
+--update TicketDetails set FK_Department=3
+
+
+GO
+
+
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proTicketsUpdate]    Script Date: 08/12/2018 10:26:05 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*----------------------------------------------------------------------------------
+Purpose    : 
+Author     : Nithin Das H
+Copyright  : d
+Created on : 07/01/2017
+Input      : 
+Output     : 
+------------------------------------------------------------------------------------
+MODIFICATIONS 
+On      By       OMID
+------------------------------------------------------------------------------------
+07/01/2017	Nithin Das Hlal		0
+03/02/2017	Nithin Das H		Attachment update
+23/02/2017	Nithin Das H		CheckPermission
+------------------------------------------------------------------------------------*/
+ALTER PROCEDURE [dbo].[proTicketsUpdate]
+				@UserAction Tinyint=0,
+				@ID_Tickets BIGINT=0,
+				@TickNo NVARCHAR(200)='',
+				@TickDate DATETIME,
+				@TickPriority TINYINT,
+				@TickStatus BIGINT,
+				@FK_Product BIGINT=0,
+				@FK_Topic BIGINT,
+				@FK_Client BIGINT,
+				@FK_Department BIGINT=0,
+				@TickSubject NVARCHAR(500)='',
+				@Description NVARCHAR(MAX)='',
+				@AgentCode BIGINT,
+				@UserCode BIGINT=0,
+				@FK_Company BIGINT=1,
+				@XmlAttachment	xml	,
+				@UserName NVARCHAR(500)='',
+				@Useremail NVARCHAR(500)='',
+				@UserMobile NVARCHAR(500)='',
+				@FK_PositionRequest BIGINT=0
+AS
+SET NOCOUNT ON
+DECLARE @Count INT, @ID_User BIGINT=0,@ErrCode INT,@Passed BIT,@EffectedRows INT,@OptionalCnd Varchar(250),@ErrMsg VARCHAR(2000),@AuditData VARCHAR(8000),@AtDate SMALLDATETIME,@FK_TicketDetails BIGINT
+SELECT @ErrCode=0 
+SET @AtDate=dbo.funGetDate()
+BEGIN TRY	
+	BEGIN TRANSACTION
+		IF @UserAction =1
+		BEGIN
+
+			---Check Permission...
+			EXEC proCmnCheckAgentAccess @UserAction,'Resumes',@FK_Company, @AgentCode,@ErrCode OUTPUT				
+			IF @ErrCode <> 0
+			BEGIN
+				SELECT @ErrCode	
+				ROLLBACK TRANSACTION	
+				RETURN
+			END	 
+			---Check Permission...
+
+				SET @OptionalCnd='0=0  OR CandidateMob='+''''+@UserMobile+''''+ ') AND cancelled=0'
+			EXEC @Count= dbo.funCmnCheckExisting 'Tickets','(CandidateEmailId',@Useremail,@OptionalCnd
+			IF @Count> 0 SET @ErrCode=-2				
+			IF @ErrCode<>0 
+			BEGIN
+				SELECT @ErrCode
+				ROLLBACK TRANSACTION
+				RETURN
+			END		
+
+
+
+			--SET @OptionalCnd='0=0 OR Usemail='+''''+@Useremail+''''+ ' OR UsMob='+''''+@UserMobile+''''+ ') AND cancelled=0'
+			--EXEC @Count= dbo.funCmnCheckExisting 'Users','(UsUserName',@UserName,@OptionalCnd
+			--IF @Count> 0 SET @ErrCode=-2				
+			--IF @ErrCode<>0 
+			--BEGIN
+			--	SELECT @ErrCode
+			--	ROLLBACK TRANSACTION
+			--	RETURN
+			--END		
+
+				--INSERT INTO Users(	
+				--	UsCode,
+				--	UsName,
+				--	UsMob,
+				--	Usemail,
+				--	UsUserName,
+				--	USPassword,
+				--	FK_Client,
+				--	ImagePath,
+				--	ImageName,
+				--	Active,
+				--	SortOrder,
+				--	UserCode,
+				--	UserDate,
+				--	Cancelled,
+				--	FK_Company)
+				--VALUES (
+				--	@UserName,
+				--	@UserName,
+				--	@UserMobile,
+				--	@Useremail,
+				--	@UserName,
+				--	'27sXabgDpC/EanT2or3dmQ==',
+				--	@FK_Client,
+				--	'../UploadedImages/UserUpload/' ,
+				--	'',
+				--	1,
+				--	0,
+				--	@UserCode,
+				--	dbo.funGetDate(),
+				--	0,
+				--	@FK_Company)
+				--SELECT @ID_User=SCOPE_IDENTITY();
+				--SET @UserCode=@ID_User
+			INSERT INTO Tickets(	
+				TickNo,
+				TickDate,
+				TickSubject,
+				TickPriority,
+				TickStatus,
+				FK_Product,
+				FK_Topic,
+				FK_Client,
+				AgentCode,
+				UserCode,
+				UserDate,
+				Cancelled,
+				FK_Company,
+				CandidateName,
+				CandidateEmailId,
+				CandidateMob,
+				FK_PositionRequest)
+			VALUES (
+				dbo.funGetResumeNo(@FK_Company),
+				@TickDate,
+				@TickSubject,
+				@TickPriority,
+				@TickStatus,
+				@FK_Product,
+				@FK_Topic,
+				@FK_Client,
+				@AgentCode,
+				@ID_User,
+				dbo.funGetDate(),
+				0,
+				@FK_Company,
+				@UserName,				
+				@Useremail,
+				@UserMobile,
+				@FK_PositionRequest		
+				)
+			SELECT @ID_Tickets=SCOPE_IDENTITY();
+		 		----Update AuditTrail
+				SEt @AuditData='Inserted ID_Tickets(Agent)- '+''+CONVERT(varchar(200), @ID_Tickets)																													
+				IF @ID_Tickets>0 
+				BEGIN
+					--SELECT @FK_Department=ISNULL(FK_Department,0) FROM Product WHERE ID_Product=@FK_Product
+					INSERT INTO TicketDetails(FK_Tickets,FK_Department,AgentFrom,AgentTo,TransStatus,Description,UserCode,AgentCode,EnteredOn)
+					VALUES(@ID_Tickets,@FK_Department,0,0,@TickStatus,@Description,@UserCode,@AgentCode,dbo.funGetDate())
+					SELECT @FK_TicketDetails=SCOPE_IDENTITY()
+
+						INSERT INTO TicketDetailsAttachment(
+						FK_TicketDetails,
+						AttachmentPath,
+						AttachmentName,
+						UserCode,
+						AgentCode,
+						EnteredOn)
+						SELECT
+						@FK_TicketDetails,
+						'../UploadedAttachments/' ,
+						T.Item.query('./AttachmentName').value('.', 'NVARCHAR(200)') AttachmentName,
+						@UserCode,
+						@AgentCode,
+						dbo.funGetDate()
+						FROM @XmlAttachment.nodes('/root/AgentTicketsAttachments') AS T(Item)
+
+					EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_Tickets,@AuditData,'Tickets',@FK_Company,@AgentCode,NULL,NULL,NULL,'TickNo',@TickNo,'TickDate',@TickDate,'TickSubject',@TickSubject,
+					'TickPriority',@TickPriority,'TickStatus',@TickStatus,'FK_Product',@FK_Product,'FK_Topic',
+					@FK_Topic,'AgentCode',@AgentCode,'CandidateName',
+					@UserName,'CandidateEmailId',@Useremail,'CandidateMob',@UserMobile,'FK_PositionRequest',@FK_PositionRequest
+					----Update AuditTrail
+				END
+
+			SELECT @ID_Tickets
+		END
+		ELSE IF @UserAction=2
+		BEGIN
+
+			SET @OptionalCnd='0=0  OR CandidateMob='+''''+@UserMobile+''''+ ') AND cancelled=0 AND ID_Tickets<>'+ Cast(@ID_Tickets AS Varchar)+' AND  FK_Company='+ Cast(@FK_Company AS Varchar)
+				EXEC @Count= dbo.funCmnCheckExisting 'Tickets','(CandidateEmailId',@Useremail,@OptionalCnd
+				IF @Count> 0 SET @ErrCode=-2
+				IF @ErrCode<>0
+				BEGIN
+					SELECT @ErrCode
+					ROLLBACK TRANSACTION
+					RETURN
+				END
+		     	Update   Tickets SET 			
+				TickSubject=@TickSubject,
+				TickPriority=@TickPriority,
+				TickStatus=@TickStatus,
+				FK_Product=@FK_Product,
+				FK_Topic=@FK_Topic,
+				FK_Client=@FK_Client,
+				CandidateName=  @UserName,	
+				CandidateEmailId=@Useremail,
+				CandidateMob=@UserMobile,
+				FK_PositionRequest=@FK_PositionRequest
+				WHERE ID_Tickets=@ID_Tickets
+
+				SEt @AuditData='updated ID_Tickets(Agent)- '+''+CONVERT(varchar(200), @ID_Tickets)	
+					EXEC proAuditTrailUpdate @AtDate,@UserAction,@ID_Tickets,@AuditData,'Tickets',
+					@FK_Company,@AgentCode,NULL,NULL,NULL,'TickNo',@TickNo,'TickDate',@TickDate,'TickSubject',@TickSubject,
+					'TickPriority',@TickPriority,'TickStatus',@TickStatus,
+					'FK_Product',@FK_Product,'FK_Topic',@FK_Topic,'AgentCode',@AgentCode,'CandidateName',
+					@UserName,'CandidateEmailId',@Useremail,'CandidateMob',@UserMobile,'FK_PositionRequest',@FK_PositionRequest
+
+				select 1
+			
+			
+		END
+			
+	COMMIT TRANSACTION 
+END TRY 
+
+BEGIN CATCH 
+	SET @ErrCode=-1
+	SELECT @ErrCode
+	SELECT @ErrMsg=ERROR_MESSAGE()
+	print ERROR_MESSAGE()
+	ROLLBACK TRANSACTION 
+	--EXEC ProUpdateErrorLog	@UserAction,'',@SubModule,@DbName,'',@ErrMsg,@BranchCodeUser,@FK_Machine,@UserCode
+END CATCH 
+
+
+
+
+
+GO
+
+
+
+GO
+/****** Object:  StoredProcedure [dbo].[proTicketsSelect]    Script Date: 08/12/2018 10:38:48 PM ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+/*---------------------------------------------------------------------------------
+Purpose    : Select REsume Master
+Author     : Nithin Das H
+Copyright  : d
+Created on :20/11/2017
+Input      : 
+Output     : 
+-----------------------------------------------------------------------------------
+MODIFICATIONS 
+On			By			OMID
+-----------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------*/
+
+ALTER PROCEDURE [dbo].[proTicketsSelect]
+		@ID_Tickets BIGINT=0,
+		@TickNo NVARCHAR(200)='',
+		@TickSubject NVARCHAR(500)='',
+		@Status INT=0,
+		@PageIndex int=1, 
+		@PageSize int=10,
+		@UserCode BIGINT=0,
+		@ClientName NVARCHAR(200)='',
+		@FK_Company BIGINT=1
+	
+AS BEGIN
+
+SET NOCOUNT ON
+
+DECLARE @TotalRecord BIGINT,@DepID BIGINT,@Admin BIT,@OverdueHrs BIGINT,@AdminDepID BIGINT
+
+	SELECT @Admin=Administrator FROM Agent WHERE ID_Agent=@UserCode
+	SET @Admin= ISNULL(@Admin,0)
+	IF @Admin=1
+	BEGIN
+		SET @DepID=-2
+		SELECT @AdminDepID=ISNULL(FK_Department,0) FROM Agent WHERE ID_Agent=@UserCode 
+	END
+	ELSE
+	BEGIN
+		SELECT @DepID=ISNULL(FK_Department,0) FROM Agent WHERE ID_Agent=@UserCode AND Manager=1
+	END
+	SET @DepID= ISNULL(@DepID,0)
+	SET @AdminDepID= ISNULL(@AdminDepID,0)
+	
+	SELECT @TotalRecord=COUNT(*) FROM (SELECT  DISTINCT ID_Tickets
+						 FROM Tickets T 
+							LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+							LEFT JOIN Agent AA ON AA.ID_Agent=T.LastAssignedAgent
+							LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+							LEFT JOIN Status S ON S.ID_Status=T.TickStatus
+							
+
+						 WHERE T.Cancelled=0 AND T.FK_Company=@FK_Company AND (TD.AgentTo=@UserCode OR TD.FK_Department =(CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+						OR TD.FK_Department  IN  (SELECT AD.FK_Department
+							FROM AgentDetails AD JOIN Agent A ON AD.FK_Agents=A.ID_Agent
+							WHERE AD.FK_Agents=@UserCode AND AD.Cancelled=0 AND A.Manager=1)
+						 )
+						AND (TickStatus= CASE WHEN @Status>0 THEN @Status ELSE TickStatus END )
+					    AND ((AgentNotSeen= (CASE WHEN @Status=-1 THEN 1 ELSE AgentNotSeen END) AND TD.FK_Department=(CASE WHEN @Status=-1 AND @DepID>0 THEN @DepID WHEN @Status=-1 AND @AdminDepID>0 THEN @AdminDepID ELSE TD.FK_Department END  )) OR T.LastAssignedAgent=@UserCode)
+						AND(   T.CandidateName LIKE '%'+@ClientName+'%' OR T.CandidateEmailId LIKE '%'+@ClientName+'%' OR T.CandidateMob LIKE '%'+@ClientName+'%' OR C.CliName LIKE '%'+@ClientName+'%'
+						OR T.TickSubject LIKE '%'+@TickSubject+'%' OR T.TickNo LIKE '%'+@TickNo+'%' OR S.StatusName LIKE '%'+@TickNo+'%')
+								) v
+	;WITH CTE AS 
+	(
+	SELECT  ROW_NUMBER() OVER (ORDER BY (CASE WHEN LastAssignedAgent=@UserCode THEN 1 ELSE 0 END)  DESC,ID_Tickets DESC ) AS SlNo,*
+	
+	 FROM  
+		(SELECT  DISTINCT T.*,C.CliName,ISNULL(AA.AgName,'None') as LastAssignAgentName,(CASE WHEN (TD.FK_Department=@DepID OR TD.FK_Department=@AdminDepID) THEN 1 ELSE 0 END) as DefaultDepartment,
+		(SELECT COUNT(FK_Tickets) FROM TicketDetails WHERE AgentCode=0 AND Cancelled=0 AND FK_Tickets=T.ID_Tickets)AS UserCount,
+				(SELECT COUNT(FK_Tickets)   FROM TicketDetails WHERE UserCode=0 AND Cancelled=0 AND FK_Tickets=T.ID_Tickets) AS AgentCount,
+				CASE WHEN (select count(TDA.FK_TicketDetails) from TicketDetailsAttachment TDA join TicketDetails tdc on  TDA.FK_TicketDetails =tdc.ID_TicketDetails where tdc.FK_Tickets =t.ID_Tickets) = 0 THEN 0   ELSE 1 END Attchment
+	
+		FROM Tickets T 
+			LEFT JOIN TicketDetails TD ON T.ID_Tickets=TD.FK_Tickets AND TD.Cancelled=0
+			LEFT JOIN Agent AA ON AA.ID_Agent=T.LastAssignedAgent
+			LEFT JOIN Client C ON C.ID_Client=T.FK_Client
+			LEFT JOIN Status S ON S.ID_Status=T.TickStatus
+		
+
+		
+		WHERE T.Cancelled=0 AND T.FK_Company=@FK_Company AND (TD.AgentTo=@UserCode OR TD.FK_Department =(CASE WHEN @DepID>0 THEN @DepID WHEN @DepID=-2 THEN TD.FK_Department ELSE -1 END)
+		OR TD.FK_Department 
+		
+		  IN  (SELECT AD.FK_Department
+							FROM AgentDetails AD JOIN Agent A ON AD.FK_Agents=A.ID_Agent
+							WHERE AD.FK_Agents=@UserCode AND AD.Cancelled=0 AND A.Manager=1)
+							
+							
+		)  
+		AND (TickStatus= CASE WHEN @Status>0 THEN @Status ELSE TickStatus END )
+		AND ((AgentNotSeen= (CASE WHEN @Status=-1 THEN 1 ELSE AgentNotSeen END) AND TD.FK_Department=(CASE WHEN @Status=-1 AND @DepID>0 THEN @DepID WHEN @Status=-1 AND @AdminDepID>0 THEN @AdminDepID ELSE TD.FK_Department END  )) OR T.LastAssignedAgent=@UserCode)
+		AND(   T.CandidateName LIKE '%'+@ClientName+'%' OR T.CandidateEmailId LIKE '%'+@ClientName+'%' OR T.CandidateMob LIKE '%'+@ClientName+'%' OR C.CliName LIKE '%'+@ClientName+'%'
+		OR T.TickSubject LIKE '%'+@TickSubject+'%' OR T.TickNo LIKE '%'+@TickNo+'%'OR S.StatusName LIKE '%'+@TickNo+'%')
+		
+		
+		) t 
+		
+		
+  	) 
+
+SELECT	SlNo,
+		ID_Tickets,
+		TickNo,
+		TickDate,	
+		TickSubject,
+		TickPriority,
+		TickStatus,
+		(SELECT statusName FROM Status WHERE ID_status=TickStatus)TickStatusName,
+		FK_Product,
+		FK_Topic,
+		AgentCode,
+		UserCode,
+		CandidateName as UserCodeName,
+		CandidateMob as UsMob,
+		CandidateEmailId as Usemail,
+		UserDate,
+		Cancelled,
+		CancelledUser,
+		CancelledOn,
+		FK_Company,
+		CliName,
+		(CASE WHEN AgentNotSeen=1 AND (SELECT SUM(CAST(Administrator AS INT)+CAST(Manager AS INT)+CAST(TeamLead AS INT)) FROM Agent WHERE ID_Agent=@UserCode)>0 THEN 1 ELSE 0 END) AgentNotSeen,
+		UserCount,
+		AgentCount,
+		Attchment,
+		DefaultDepartment,
+		LastAssignAgentName,
+		(CASE WHEN LastAssignedAgent=@UserCode THEN 1 ELSE 0 END) LastAssignedAgent,
+		(CASE WHEN (OverDueDate IS NOT NULL AND  OverDueDate<=dbo.funGetDate() AND TickStatus<>3) THEN 1 ELSE 0 END) as OverDueAgent,
+	
+		ISNULL(@TotalRecord,0) as RecordCount	
+FROM 
+		CTE
+WHERE SLNO>=(@PageIndex-1) * @PageSize + 1 AND SLNO <=(((@PageIndex-1) * @PageSize+ 1) + @PageSize)-1
+ORDER BY (CASE WHEN LastAssignedAgent=@UserCode THEN 1 ELSE 0 END)  DESC,ID_Tickets DESC
+
+END
+
+
+
+--exec proTicketsSelect @ID_Tickets=N'0',@TickNo=N'',@TickSubject=N'',@PageIndex=1,
+--@PageSize=50,@Status=0,@ClientName=N'',@UserCode=1,@FK_Company=1
+
+
+GO
+
+
+
